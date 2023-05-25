@@ -5,5 +5,5 @@ import ru.skypro.lessons.springboot.weblibrary.controller.pojo.Employee;
 import java.util.List;
 
 public interface EmployeeRepository {
-    public List<Employee> getAllEmployees();
+     List<Employee> getAllEmployees();
 }
