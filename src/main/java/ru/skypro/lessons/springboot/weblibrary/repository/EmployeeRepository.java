@@ -1,6 +1,6 @@
 package ru.skypro.lessons.springboot.weblibrary.repository;
 
-import ru.skypro.lessons.springboot.weblibrary.controller.pojo.Employee;
+import ru.skypro.lessons.springboot.weblibrary.pojo.Employee;
 
 import java.util.List;
 
