@@ -1,8 +1,9 @@
-package ru.skypro.lessons.springboot.weblibrary.controller.pojo;
+package ru.skypro.lessons.springboot.weblibrary.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ru.skypro.lessons.springboot.weblibrary.pojo.Employee;
 import ru.skypro.lessons.springboot.weblibrary.service.EmployeeService;
 
 import java.util.Comparator;
@@ -26,36 +27,22 @@ public class EmployeeController {
 
     @GetMapping("/salary/sum")
     public Integer showSalary() {
-        Integer sum = showEmployee().stream().map(Employee::getSalary).reduce(0, Integer::sum);
-        return sum;
+        return employeeService.showSalary();
     }
 
     @GetMapping("/salary/min")
     public List<Employee> showSalaryMin() {
-        Comparator<Employee> comparator = Comparator.comparing(Employee::getSalary);
-        List<Employee> minSalary = showEmployee().stream()
-                .min(comparator)
-                .stream()
-                .collect(Collectors.toList());
-        return minSalary;
+      return employeeService.showSalaryMin();
 
     }
 
     @GetMapping("/salary/max")
     public List<Employee> showSalaryMax() {
-        Comparator<Employee> comparator = Comparator.comparing(Employee::getSalary);
-        List<Employee> maxSalary = showEmployee().stream()
-                .max(comparator)
-                .stream()
-                .collect(Collectors.toList());
-        return maxSalary;
+        return employeeService.showSalaryMax();
     }
 
     @GetMapping("/high-salary")
     public List<Employee> showSalaryHigh() {
-        int chetcik = showEmployee().size();
-        int midlSalary = showSalary() / chetcik;
-        List<Employee> salaryBigerMidlSalary = showEmployee().stream().filter(i -> i.getSalary() >= midlSalary).toList();
-        return salaryBigerMidlSalary;
+      return employeeService.showSalaryHigh();
     }
 }

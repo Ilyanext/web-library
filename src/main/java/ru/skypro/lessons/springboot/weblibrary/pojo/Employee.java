@@ -1,4 +1,4 @@
-package ru.skypro.lessons.springboot.weblibrary.controller.pojo;
+package ru.skypro.lessons.springboot.weblibrary.pojo;
 
 public class Employee {
     private String name;
