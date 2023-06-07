@@ -1,17 +1,14 @@
 package ru.skypro.lessons.springboot.weblibrary.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.skypro.lessons.springboot.weblibrary.pojo.Employee;
 import ru.skypro.lessons.springboot.weblibrary.service.EmployeeService;
 
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/employee")
+
 public class EmployeeController {
 
     private final EmployeeService employeeService;
@@ -32,7 +29,7 @@ public class EmployeeController {
 
     @GetMapping("/salary/min")
     public List<Employee> showSalaryMin() {
-      return employeeService.showSalaryMin();
+        return employeeService.showSalaryMin();
 
     }
 
@@ -43,6 +40,32 @@ public class EmployeeController {
 
     @GetMapping("/high-salary")
     public List<Employee> showSalaryHigh() {
-      return employeeService.showSalaryHigh();
+        return employeeService.showSalaryHigh();
+    }
+
+
+    @GetMapping("/salaryHigherThan")
+    public List<Employee> getEmployeesWithSalaryHigherThan(@RequestParam("salary") Integer salary) {
+        return employeeService.getEmployeesWithSalaryHigherThan(salary);
+    }
+
+    @GetMapping("{id}")
+    public List<Employee> getEmployeesByIdWithRequired(@PathVariable(required = false) Integer id) {
+        return employeeService.getEmployeesByIdWithRequired(id);
+    }
+
+    @DeleteMapping("{id}")//?
+    public void deleteEmployeesWithId(@PathVariable(required = false) Integer id) {
+        employeeService.deleteEmployeesWithId(id);
+    }
+
+    @PostMapping("/") //?
+    public void addEmployee(@RequestBody Employee employee) {
+        employeeService.addEmployee(employee);
+    }
+
+    @PutMapping("{id}") //?
+    public void editEmployee(@RequestBody int id) {
+        employeeService.editEmployee(id);
     }
 }

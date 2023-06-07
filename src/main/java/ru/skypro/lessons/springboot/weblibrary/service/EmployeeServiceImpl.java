@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class EmployeeServiceImpl implements EmployeeService{
+public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepository employeeRepository;
 
     public EmployeeServiceImpl(EmployeeRepository employeeRepository) {
@@ -52,5 +52,33 @@ public class EmployeeServiceImpl implements EmployeeService{
         int midlSalary = showSalary() / chetcik;
         List<Employee> salaryBigerMidlSalary = getAllEmployees().stream().filter(i -> i.getSalary() >= midlSalary).toList();
         return salaryBigerMidlSalary;
+    }
+
+
+    @Override
+    public List<Employee> getEmployeesWithSalaryHigherThan(Integer salary) {
+        List<Employee> salaryEmployeeBigerThenSalary = getAllEmployees().stream().filter(i -> i.getSalary() >= salary).toList();
+        return salaryEmployeeBigerThenSalary;
+    }
+
+    @Override
+    public List<Employee> getEmployeesByIdWithRequired(Integer id) {
+        List<Employee> getIdEmplyee = getAllEmployees().stream().filter(i -> i.equals(getAllEmployees().get(id))).toList();
+        return getIdEmplyee;
+    }
+
+    @Override
+    public void deleteEmployeesWithId(Integer id) {
+        getAllEmployees().remove(id);
+    }
+
+    @Override
+    public void addEmployee(Employee employee) {
+        getAllEmployees().add(employee);
+    }
+
+    @Override
+    public void editEmployee(int id) {
+        getAllEmployees().get(id);
     }
 }
