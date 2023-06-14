@@ -1,6 +1,7 @@
 package ru.skypro.lessons.springboot.weblibrary.controller;
 
 import org.springframework.web.bind.annotation.*;
+import ru.skypro.lessons.springboot.weblibrary.dto.EmployeeFullInfo;
 import ru.skypro.lessons.springboot.weblibrary.pojo.Employee;
 import ru.skypro.lessons.springboot.weblibrary.service.EmployeeService;
 
@@ -19,7 +20,7 @@ public class EmployeeController {
 
     @GetMapping
     public List<Employee> showEmployee() {
-        return employeeService.getAllEmployees();
+        return employeeService.getEmployees();
     }
 
     @GetMapping("/salary/sum")
@@ -38,16 +39,15 @@ public class EmployeeController {
         return employeeService.showSalaryMax();
     }
 
-    @GetMapping("/high-salary")
-    public List<Employee> showSalaryHigh() {
-        return employeeService.showSalaryHigh();
-    }
+
 
 
     @GetMapping("/salaryHigherThan")
     public List<Employee> getEmployeesWithSalaryHigherThan(@RequestParam("salary") Integer salary) {
         return employeeService.getEmployeesWithSalaryHigherThan(salary);
     }
+
+
 
     @GetMapping("{id}")
     public List<Employee> getEmployeesByIdWithRequired(@PathVariable(required = false) Integer id) {
@@ -59,13 +59,35 @@ public class EmployeeController {
         employeeService.deleteEmployeesWithId(id);
     }
 
-    @PostMapping("/") //?
+    @PostMapping("/")
     public void addEmployee(@RequestBody Employee employee) {
         employeeService.addEmployee(employee);
     }
 
-    @PutMapping("{id}") //?
+    @PutMapping("{id}")
     public void editEmployee(@RequestBody int id) {
         employeeService.editEmployee(id);
+    }
+
+
+
+    @GetMapping("fullInfo")
+    public List<EmployeeFullInfo> getEmployeesFull() {
+        return employeeService.getEmployeesFull();
+    }
+
+    @GetMapping("/paging/page")
+    public List<Employee> getEmployeesWithPaging(@RequestParam("page") int page) {
+        return employeeService.getEmployeesWithPaging(page, 10);
+    }
+
+    @GetMapping("/withHighestSalary")
+    public List<Employee> withHighestSalary() {
+        return employeeService.withHighestSalary();
+    }
+
+    @GetMapping(value = {"/","{position}"})
+    public List<Employee> getEmployeesFullPosition(@PathVariable(required = false)String position) {
+        return employeeService.getEmployeesFullPosition(position);
     }
 }
