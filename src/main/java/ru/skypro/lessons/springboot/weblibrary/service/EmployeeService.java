@@ -11,31 +11,33 @@ import java.util.List;
 public interface EmployeeService {
     List<EmployeeDto> getAllEmployees();
 
-    List<Employee> getEmployees();
+    List<EmployeeDto> getEmployees();
 
     public Integer showSalary();
 
-    public List<Employee> showSalaryMin();
+    public List<EmployeeDto> showSalaryMin();
 
-    public List<Employee> showSalaryMax();
+    public List<EmployeeDto> showSalaryMax();
 
-    public List<Employee> withHighestSalary();
+    public List<EmployeeDto> getEmployeesWithSalaryHigherThan(Integer salary);
 
-    public List<Employee> getEmployeesWithSalaryHigherThan(Integer salary);
-
-    public List<Employee> getEmployeesByIdWithRequired(Integer id);
+    public List<EmployeeDto> getEmployeesByIdWithRequired(Integer id);
 
     void deleteEmployeesWithId(int id);
 
-    List<Employee> getEmployeesWithPaging(int page, int size);
+
 
     void addEmployee(@RequestBody Employee employee);
 
+
+
     void editEmployee(@RequestBody int id);
-    List<Employee> findByIdGreaterThan(int number);
+    List<EmployeeDto> findByIdGreaterThan(int number);
 
 
     List<EmployeeFullInfo> getEmployeesFull();
-    List<Employee> getEmployeesFullPosition(@PathVariable(required = false)String position);
+    List<EmployeeDto> getEmployeesFullPosition(String positionEmployee);
+    List<EmployeeDto> withHighestSalary();
+    List<EmployeeDto> getEmployeesWithPaging(int page, int size);
 }
 

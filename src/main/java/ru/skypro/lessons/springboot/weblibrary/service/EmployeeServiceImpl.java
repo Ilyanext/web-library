@@ -23,28 +23,28 @@ public class EmployeeServiceImpl implements EmployeeService {
         this.employeeRepository = employeeRepository;
         this.paginEmployeeRepository = paginEmployeeRepository;
     }
+
     @Override
     public List<EmployeeDto> getAllEmployees() {
-        // Получаем список сотрудников из репозитория,
-        // Преобразуем их в DTO и собираем в список
         return employeeRepository.findAllEmployees().stream()
-                .map(EmployeeDto::fromEmployee)
+                .map((EmployeeDto employee) -> EmployeeDto.fromEmployee(employee.toEmployee()))
                 .collect(Collectors.toList());
     }
-    public List<Employee> getEmployees() {
+
+    public List<EmployeeDto> getEmployees() {
         return employeeRepository.findAllEmployees();
     }
 
     @Override
     public Integer showSalary() {
-        Integer sum = getEmployees().stream().map(Employee::getSalary).reduce(0, Integer::sum);
+        Integer sum = getEmployees().stream().map(EmployeeDto::getSalary).reduce(0, Integer::sum);
         return sum;
     }
 
     @Override
-    public List<Employee> showSalaryMin() {
-        Comparator<Employee> comparator = Comparator.comparing(Employee::getSalary);
-        List<Employee> minSalary = getEmployees().stream()
+    public List<EmployeeDto> showSalaryMin() {
+        Comparator<EmployeeDto> comparator = Comparator.comparing(EmployeeDto::getSalary);
+        List<EmployeeDto> minSalary = getEmployees().stream()
                 .min(comparator)
                 .stream()
                 .collect(Collectors.toList());
@@ -52,33 +52,27 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<Employee> showSalaryMax() {
-        Comparator<Employee> comparator = Comparator.comparing(Employee::getSalary);
-        List<Employee> maxSalary = getEmployees().stream()
+    public List<EmployeeDto> showSalaryMax() {
+        Comparator<EmployeeDto> comparator = Comparator.comparing(EmployeeDto::getSalary);
+        List<EmployeeDto> maxSalary = getEmployees().stream()
                 .max(comparator)
                 .stream()
                 .collect(Collectors.toList());
         return maxSalary;
     }
 
-    @Override
-    public List<Employee> withHighestSalary() {
-        int chetcik = getEmployees().size();
-        int midlSalary = showSalary() / chetcik;
-        List<Employee> salaryBigerMidlSalary = getEmployees().stream().filter(i -> i.getSalary() >= midlSalary).toList();
-        return salaryBigerMidlSalary;
-    }
+
 
 
     @Override
-    public List<Employee> getEmployeesWithSalaryHigherThan(Integer salary) {
-        List<Employee> salaryEmployeeBigerThenSalary = getEmployees().stream().filter(i -> i.getSalary() >= salary).toList();
+    public List<EmployeeDto> getEmployeesWithSalaryHigherThan(Integer salary) {
+        List<EmployeeDto> salaryEmployeeBigerThenSalary = getEmployees().stream().filter(i -> i.getSalary() >= salary).toList();
         return salaryEmployeeBigerThenSalary;
     }
 
     @Override
-    public List<Employee> getEmployeesByIdWithRequired(Integer id) {
-        List<Employee> getIdEmplyee = getEmployees().stream().filter(i -> i.equals(getEmployees().get(id))).toList();
+    public List<EmployeeDto> getEmployeesByIdWithRequired(Integer id) {
+        List<EmployeeDto> getIdEmplyee = getEmployees().stream().filter(i -> i.equals(getEmployees().get(id))).toList();
         return getIdEmplyee;
     }
 
@@ -87,14 +81,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeRepository.deleteById(id);
     }
 
-    @Override
-    public List<Employee> getEmployeesWithPaging(int page,int size) {
-        Pageable employeeOfConcretePage =  PageRequest.of(page,size);
-        Page<Employee> allPage = employeeRepository.findAll(employeeOfConcretePage);
-
-        return allPage.stream()
-                .toList();
-    }
 
     // Метод для добавления нового сотрудника
     @Override
@@ -108,7 +94,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<Employee> findByIdGreaterThan(int number) {
+    public List<EmployeeDto> findByIdGreaterThan(int number) {
         return employeeRepository.findByIdGreaterThan(10000);
     }
 
@@ -120,9 +106,20 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<Employee> getEmployeesFullPosition(String position) {
-        return employeeRepository.getEmployeesFullPosition(position);
+    public List<EmployeeDto> getEmployeesFullPosition(String positionEmployee) {
+        return employeeRepository.getEmployeesFullPosition(positionEmployee);
     }
+    @Override
+    public List<EmployeeDto> withHighestSalary() {
+        return employeeRepository.withHighestSalary();
+    }
+    @Override
+    public List<EmployeeDto> getEmployeesWithPaging(int page,int size) {
+        Pageable employeeOfConcretePage =  PageRequest.of(page,size);
+        Page<EmployeeDto> allPage = employeeRepository.findAll(employeeOfConcretePage);
 
+        return allPage.stream()
+                .toList();
+    }
 
 }

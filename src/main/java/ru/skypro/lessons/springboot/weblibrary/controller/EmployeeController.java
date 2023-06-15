@@ -1,6 +1,7 @@
 package ru.skypro.lessons.springboot.weblibrary.controller;
 
 import org.springframework.web.bind.annotation.*;
+import ru.skypro.lessons.springboot.weblibrary.dto.EmployeeDto;
 import ru.skypro.lessons.springboot.weblibrary.dto.EmployeeFullInfo;
 import ru.skypro.lessons.springboot.weblibrary.pojo.Employee;
 import ru.skypro.lessons.springboot.weblibrary.service.EmployeeService;
@@ -19,7 +20,7 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public List<Employee> showEmployee() {
+    public List<EmployeeDto> showEmployee() {
         return employeeService.getEmployees();
     }
 
@@ -29,13 +30,13 @@ public class EmployeeController {
     }
 
     @GetMapping("/salary/min")
-    public List<Employee> showSalaryMin() {
+    public List<EmployeeDto> showSalaryMin() {
         return employeeService.showSalaryMin();
 
     }
 
     @GetMapping("/salary/max")
-    public List<Employee> showSalaryMax() {
+    public List<EmployeeDto> showSalaryMax() {
         return employeeService.showSalaryMax();
     }
 
@@ -43,14 +44,14 @@ public class EmployeeController {
 
 
     @GetMapping("/salaryHigherThan")
-    public List<Employee> getEmployeesWithSalaryHigherThan(@RequestParam("salary") Integer salary) {
+    public List<EmployeeDto> getEmployeesWithSalaryHigherThan(@RequestParam("salary") Integer salary) {
         return employeeService.getEmployeesWithSalaryHigherThan(salary);
     }
 
 
 
     @GetMapping("{id}")
-    public List<Employee> getEmployeesByIdWithRequired(@PathVariable(required = false) Integer id) {
+    public List<EmployeeDto> getEmployeesByIdWithRequired(@PathVariable(required = false) Integer id) {
         return employeeService.getEmployeesByIdWithRequired(id);
     }
 
@@ -77,17 +78,17 @@ public class EmployeeController {
     }
 
     @GetMapping("/paging/page")
-    public List<Employee> getEmployeesWithPaging(@RequestParam("page") int page) {
+    public List<EmployeeDto> getEmployeesWithPaging(@RequestParam("page") int page) {
         return employeeService.getEmployeesWithPaging(page, 10);
     }
 
     @GetMapping("/withHighestSalary")
-    public List<Employee> withHighestSalary() {
+    public List<EmployeeDto> withHighestSalary() {
         return employeeService.withHighestSalary();
     }
 
-    @GetMapping(value = {"/","{position}"})
-    public List<Employee> getEmployeesFullPosition(@PathVariable(required = false)String position) {
-        return employeeService.getEmployeesFullPosition(position);
+    @GetMapping("{position}")
+    public List<EmployeeDto> getEmployeesFullPosition(@RequestParam("positionEmployee") String positionEmployee) {
+        return employeeService.getEmployeesFullPosition(positionEmployee);
     }
 }
