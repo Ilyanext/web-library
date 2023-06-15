@@ -1,5 +1,6 @@
 package ru.skypro.lessons.springboot.weblibrary.service;
 
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import ru.skypro.lessons.springboot.weblibrary.dto.EmployeeDto;
@@ -35,7 +36,7 @@ public interface EmployeeService {
     List<EmployeeDto> findByIdGreaterThan(int number);
 
 
-    List<EmployeeFullInfo> getEmployeesFull();
+    List<EmployeeFullInfo> getEmployeesFull(int id);
     List<EmployeeDto> getEmployeesFullPosition(String positionEmployee);
     List<EmployeeDto> withHighestSalary();
     List<EmployeeDto> getEmployeesWithPaging(int page, int size);

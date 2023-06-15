@@ -73,8 +73,8 @@ public class EmployeeController {
 
 
     @GetMapping("fullInfo")
-    public List<EmployeeFullInfo> getEmployeesFull() {
-        return employeeService.getEmployeesFull();
+    public List<EmployeeFullInfo> getEmployeesFull(int id) {
+        return employeeService.getEmployeesFull(id);
     }
 
     @GetMapping("/paging/page")

@@ -2,6 +2,8 @@ package ru.skypro.lessons.springboot.weblibrary.pojo;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "position")
 public class Position {
@@ -15,7 +17,8 @@ public class Position {
         this.id = id;
         this.name = name;
     }
-
+    @OneToMany(mappedBy = "position")
+    private List<Employee> employee;
     public Position() {
 
     }

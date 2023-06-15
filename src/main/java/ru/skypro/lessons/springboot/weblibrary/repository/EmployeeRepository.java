@@ -22,10 +22,10 @@ public interface EmployeeRepository extends CrudRepository<Employee, Integer> {
     Page<EmployeeDto> findAll(Pageable employeeOfConcretePage);
 
     @Query("SELECT new ru.skypro.lessons.springboot.weblibrary.dto." +
-            "EmployeeFullInfo(e.name , e.salary , p.name) " +
+            "EmployeeFullInfo(e.id, e.name , e.salary , p.name) " +
             "FROM Employee e join fetch Position p " +
-            "WHERE e.position = p ")
-    List<EmployeeFullInfo> findAllEmployeeFullInfo();
+            "WHERE e.position = p and e.id= :id")
+    List<EmployeeFullInfo> findAllEmployeeFullInfo(@Param("id") int id);
 
     @Query(value = "select emploee.name, employee.salary, position.name " +
             " from employee join position on employee.position_id = position.id where position.name = (:positionEmployee)", nativeQuery = true)
