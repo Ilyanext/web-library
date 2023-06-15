@@ -28,7 +28,7 @@ public interface EmployeeRepository extends CrudRepository<Employee, Integer> {
     List<EmployeeFullInfo> findAllEmployeeFullInfo(@Param("id") int id);
 
     @Query(value = "select emploee.name, employee.salary, position.name " +
-            " from employee join position on employee.position_id = position.id where position.name = (:positionEmployee)", nativeQuery = true)
+            " from employee join position on employee.position_id = position.id where position.name = :positionEmployee", nativeQuery = true)
     List<EmployeeDto> getEmployeesFullPosition(@Param("positionEmployee") String positionEmployee);
 
     @Query(value = "select* from employee where salary = (select max(salary) from employee); ", nativeQuery = true)
