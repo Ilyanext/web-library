@@ -16,7 +16,11 @@ public class EmployeeFullInfo {
         this.salary = salary;
         this.positionName = positionName;
     }
-
+    public EmployeeFullInfo( String name, Integer salary, String positionName) {
+        this.name = name;
+        this.salary = salary;
+        this.positionName = positionName;
+    }
     public int getId() {
         return id;
     }

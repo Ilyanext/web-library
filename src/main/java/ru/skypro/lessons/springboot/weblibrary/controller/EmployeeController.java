@@ -83,12 +83,12 @@ public class EmployeeController {
     }
 
     @GetMapping("/withHighestSalary")
-    public List<EmployeeDto> withHighestSalary() {
+    public List<EmployeeFullInfo> withHighestSalary() {
         return employeeService.withHighestSalary();
     }
 
-    @GetMapping("{position}")
-    public List<EmployeeDto> getEmployeesFullPosition(@RequestParam("positionEmployee") String positionEmployee) {
-        return employeeService.getEmployeesFullPosition(positionEmployee);
+    @GetMapping("position")
+    public List<EmployeeFullInfo> getEmployeesFullPosition(@RequestParam(required = false) String position) {
+        return employeeService.getEmployeesFullPosition(position);
     }
 }

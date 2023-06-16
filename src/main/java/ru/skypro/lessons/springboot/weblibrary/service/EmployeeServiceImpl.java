@@ -107,11 +107,12 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<EmployeeDto> getEmployeesFullPosition(String positionEmployee) {
-        return employeeRepository.getEmployeesFullPosition(positionEmployee);
+    public List<EmployeeFullInfo> getEmployeesFullPosition(String position) {
+        return employeeRepository.getEmployeesFullPosition(position);
+
     }
     @Override
-    public List<EmployeeDto> withHighestSalary() {
+    public List<EmployeeFullInfo> withHighestSalary() {
         return employeeRepository.withHighestSalary();
     }
     @Override

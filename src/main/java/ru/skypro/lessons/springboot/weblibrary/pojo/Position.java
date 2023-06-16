@@ -23,6 +23,14 @@ public class Position {
 
     }
 
+    public List<Employee> getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(List<Employee> employee) {
+        this.employee = employee;
+    }
+
     public Integer getId() {
         return id;
     }

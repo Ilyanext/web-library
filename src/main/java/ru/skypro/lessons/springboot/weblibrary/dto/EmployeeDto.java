@@ -8,6 +8,7 @@ public class EmployeeDto {
     private String name;
     private Integer salary;
 
+
     // Метод для преобразования сущности Employee в объект EmployeeDTO
     public static EmployeeDto fromEmployee(Employee employee) {
         EmployeeDto employeeDTO = new EmployeeDto();
@@ -52,5 +53,4 @@ public class EmployeeDto {
     public void setSalary(int salary) {
         this.salary = salary;
     }
-
 }

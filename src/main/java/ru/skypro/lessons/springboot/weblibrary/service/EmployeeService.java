@@ -1,5 +1,6 @@
 package ru.skypro.lessons.springboot.weblibrary.service;
 
+import jakarta.annotation.Nullable;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,8 +38,8 @@ public interface EmployeeService {
 
 
     List<EmployeeFullInfo> getEmployeesFull(int id);
-    List<EmployeeDto> getEmployeesFullPosition(String positionEmployee);
-    List<EmployeeDto> withHighestSalary();
+    List<EmployeeFullInfo> getEmployeesFullPosition(@Nullable String position);
+    List<EmployeeFullInfo> withHighestSalary();
     List<EmployeeDto> getEmployeesWithPaging(int page, int size);
 }
 
