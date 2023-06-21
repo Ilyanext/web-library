@@ -1,11 +1,14 @@
 package ru.skypro.lessons.springboot.weblibrary.controller;
 
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import ru.skypro.lessons.springboot.weblibrary.dto.EmployeeDto;
+import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.lessons.springboot.weblibrary.dto.EmployeeDTO;
 import ru.skypro.lessons.springboot.weblibrary.dto.EmployeeFullInfo;
 import ru.skypro.lessons.springboot.weblibrary.pojo.Employee;
 import ru.skypro.lessons.springboot.weblibrary.service.EmployeeService;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -20,7 +23,7 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public List<EmployeeDto> showEmployee() {
+    public List<EmployeeDTO> showEmployee() {
         return employeeService.getEmployees();
     }
 
@@ -30,28 +33,24 @@ public class EmployeeController {
     }
 
     @GetMapping("/salary/min")
-    public List<EmployeeDto> showSalaryMin() {
+    public List<EmployeeDTO> showSalaryMin() {
         return employeeService.showSalaryMin();
-
     }
 
     @GetMapping("/salary/max")
-    public List<EmployeeDto> showSalaryMax() {
+    public List<EmployeeDTO> showSalaryMax() {
         return employeeService.showSalaryMax();
     }
 
-
-
-
     @GetMapping("/salaryHigherThan")
-    public List<EmployeeDto> getEmployeesWithSalaryHigherThan(@RequestParam("salary") Integer salary) {
+    public List<EmployeeDTO> getEmployeesWithSalaryHigherThan(@RequestParam("salary") Integer salary) {
         return employeeService.getEmployeesWithSalaryHigherThan(salary);
     }
 
 
 
     @GetMapping("{id}")
-    public List<EmployeeDto> getEmployeesByIdWithRequired(@PathVariable(required = false) Integer id) {
+    public List<EmployeeDTO> getEmployeesByIdWithRequired(@PathVariable(required = false) Integer id) {
         return employeeService.getEmployeesByIdWithRequired(id);
     }
 
@@ -69,16 +68,13 @@ public class EmployeeController {
     public void editEmployee(@RequestBody int id) {
         employeeService.editEmployee(id);
     }
-
-
-
     @GetMapping("fullInfo")
     public List<EmployeeFullInfo> getEmployeesFull(int id) {
         return employeeService.getEmployeesFull(id);
     }
 
     @GetMapping("/paging/page")
-    public List<EmployeeDto> getEmployeesWithPaging(@RequestParam("page") int page) {
+    public List<EmployeeDTO> getEmployeesWithPaging(@RequestParam("page") int page) {
         return employeeService.getEmployeesWithPaging(page, 10);
     }
 
@@ -90,5 +86,10 @@ public class EmployeeController {
     @GetMapping("position")
     public List<EmployeeFullInfo> getEmployeesFullPosition(@RequestParam(required = false) String position) {
         return employeeService.getEmployeesFullPosition(position);
+    }
+
+    @PostMapping(value = "/upload",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public void uploadFile (@RequestParam("file") MultipartFile file) throws IOException {
+        employeeService.uploadFile(file);
     }
 }

@@ -1,16 +1,20 @@
 package ru.skypro.lessons.springboot.weblibrary.service;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
-import ru.skypro.lessons.springboot.weblibrary.dto.EmployeeDto;
+import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.lessons.springboot.weblibrary.dto.EmployeeDTO;
 import ru.skypro.lessons.springboot.weblibrary.dto.EmployeeFullInfo;
 import ru.skypro.lessons.springboot.weblibrary.pojo.Employee;
 import ru.skypro.lessons.springboot.weblibrary.repository.EmployeeRepository;
 import ru.skypro.lessons.springboot.weblibrary.repository.PaginEmployeeRepository;
 
+import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,26 +30,26 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<EmployeeDto> getAllEmployees() {
+    public List<EmployeeDTO> getAllEmployees() {
         return employeeRepository.findAllEmployees().stream()
-                .map((EmployeeDto employee) -> EmployeeDto.fromEmployee(employee.toEmployee()))
+                .map((EmployeeDTO employee) -> EmployeeDTO.fromEmployee(employee.toEmployee(employee)))
                 .collect(Collectors.toList());
     }
 
-    public List<EmployeeDto> getEmployees() {
+    public List<EmployeeDTO> getEmployees() {
         return employeeRepository.findAllEmployees();
     }
 
     @Override
     public Integer showSalary() {
-        Integer sum = getEmployees().stream().map(EmployeeDto::getSalary).reduce(0, Integer::sum);
+        Integer sum = getEmployees().stream().map(EmployeeDTO::getSalary).reduce(0, Integer::sum);
         return sum;
     }
 
     @Override
-    public List<EmployeeDto> showSalaryMin() {
-        Comparator<EmployeeDto> comparator = Comparator.comparing(EmployeeDto::getSalary);
-        List<EmployeeDto> minSalary = getEmployees().stream()
+    public List<EmployeeDTO> showSalaryMin() {
+        Comparator<EmployeeDTO> comparator = Comparator.comparing(EmployeeDTO::getSalary);
+        List<EmployeeDTO> minSalary = getEmployees().stream()
                 .min(comparator)
                 .stream()
                 .collect(Collectors.toList());
@@ -53,9 +57,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<EmployeeDto> showSalaryMax() {
-        Comparator<EmployeeDto> comparator = Comparator.comparing(EmployeeDto::getSalary);
-        List<EmployeeDto> maxSalary = getEmployees().stream()
+    public List<EmployeeDTO> showSalaryMax() {
+        Comparator<EmployeeDTO> comparator = Comparator.comparing(EmployeeDTO::getSalary);
+        List<EmployeeDTO> maxSalary = getEmployees().stream()
                 .max(comparator)
                 .stream()
                 .collect(Collectors.toList());
@@ -63,17 +67,15 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
 
-
-
     @Override
-    public List<EmployeeDto> getEmployeesWithSalaryHigherThan(Integer salary) {
-        List<EmployeeDto> salaryEmployeeBigerThenSalary = getEmployees().stream().filter(i -> i.getSalary() >= salary).toList();
+    public List<EmployeeDTO> getEmployeesWithSalaryHigherThan(Integer salary) {
+        List<EmployeeDTO> salaryEmployeeBigerThenSalary = getEmployees().stream().filter(i -> i.getSalary() >= salary).toList();
         return salaryEmployeeBigerThenSalary;
     }
 
     @Override
-    public List<EmployeeDto> getEmployeesByIdWithRequired(Integer id) {
-        List<EmployeeDto> getIdEmplyee = getEmployees().stream().filter(i -> i.equals(getEmployees().get(id))).toList();
+    public List<EmployeeDTO> getEmployeesByIdWithRequired(Integer id) {
+        List<EmployeeDTO> getIdEmplyee = getEmployees().stream().filter(i -> i.equals(getEmployees().get(id))).toList();
         return getIdEmplyee;
     }
 
@@ -95,10 +97,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<EmployeeDto> findByIdGreaterThan(int number) {
+    public List<EmployeeDTO> findByIdGreaterThan(int number) {
         return employeeRepository.findByIdGreaterThan(10000);
     }
-
 
 
     @Override
@@ -111,17 +112,35 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeRepository.getEmployeesFullPosition(position);
 
     }
+
     @Override
     public List<EmployeeFullInfo> withHighestSalary() {
         return employeeRepository.withHighestSalary();
     }
+
     @Override
-    public List<EmployeeDto> getEmployeesWithPaging(int page,int size) {
-        Pageable employeeOfConcretePage =  PageRequest.of(page,size);
-        Page<EmployeeDto> allPage = employeeRepository.findAll(employeeOfConcretePage);
+    public List<EmployeeDTO> getEmployeesWithPaging(int page, int size) {
+        Pageable employeeOfConcretePage = PageRequest.of(page, size);
+        Page<EmployeeDTO> allPage = employeeRepository.findAll(employeeOfConcretePage);
 
         return allPage.stream()
                 .toList();
     }
 
+    @Override
+    public void uploadFile(MultipartFile file) throws IOException { // ?????
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<EmployeeDTO> employeeDTO = objectMapper.readValue((JsonParser) file, new TypeReference<List<EmployeeDTO>>() {
+        });
+        List<Employee> newEmployee = employeeDTO.stream()
+                .map(EmployeeDTO::toEmployee)
+                .collect(Collectors.toList());
+        employeeRepository.saveAll(newEmployee);
+
+    }
+
+
 }
+
+

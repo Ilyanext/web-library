@@ -13,15 +13,19 @@ public class Position {
 
     private String name;
 
-    public Position(Integer id, String name) {
-        this.id = id;
-        this.name = name;
-    }
+
     @OneToMany(mappedBy = "position")
     private List<Employee> employee;
     public Position() {
 
     }
+
+    public Position(Integer id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+
 
     public List<Employee> getEmployee() {
         return employee;
@@ -45,5 +49,13 @@ public class Position {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "Position{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
     }
 }
