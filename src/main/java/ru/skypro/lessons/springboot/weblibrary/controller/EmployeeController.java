@@ -23,13 +23,18 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public List<EmployeeDTO> showEmployee() {
+    public Iterable<Employee> showEmployee() {
         return employeeService.getEmployees();
     }
 
     @GetMapping("/salary/sum")
     public Integer showSalary() {
         return employeeService.showSalary();
+    }
+
+    @GetMapping("/salary/avg")
+    public Integer showAvgSalary() {
+        return employeeService.showAvgSalary();
     }
 
     @GetMapping("/salary/min")
@@ -46,7 +51,6 @@ public class EmployeeController {
     public List<EmployeeDTO> getEmployeesWithSalaryHigherThan(@RequestParam("salary") Integer salary) {
         return employeeService.getEmployeesWithSalaryHigherThan(salary);
     }
-
 
 
     @GetMapping("{id}")
@@ -68,6 +72,7 @@ public class EmployeeController {
     public void editEmployee(@RequestBody int id) {
         employeeService.editEmployee(id);
     }
+
     @GetMapping("fullInfo")
     public List<EmployeeFullInfo> getEmployeesFull(int id) {
         return employeeService.getEmployeesFull(id);
@@ -83,13 +88,20 @@ public class EmployeeController {
         return employeeService.withHighestSalary();
     }
 
+    @GetMapping("/withLowSalary")
+    public List<EmployeeFullInfo> withLowSalary() {
+        return employeeService.withLowSalary();
+    }
+
     @GetMapping("position")
     public List<EmployeeFullInfo> getEmployeesFullPosition(@RequestParam(required = false) String position) {
         return employeeService.getEmployeesFullPosition(position);
     }
 
-    @PostMapping(value = "/upload",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public void uploadFile (@RequestParam("file") MultipartFile file) throws IOException {
+    @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public void uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
         employeeService.uploadFile(file);
     }
+
+
 }

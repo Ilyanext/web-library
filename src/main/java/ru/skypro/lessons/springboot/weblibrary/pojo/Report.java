@@ -1,78 +1,55 @@
 package ru.skypro.lessons.springboot.weblibrary.pojo;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SourceType;
+
+import java.time.Instant;
 
 @Entity
-@Table(name = "report")
 public class Report {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private int id;
 
-    private String nameDepartment;
-    private int numberEmployees;
+    @Lob
+    @Column(columnDefinition = "oid", nullable = false)
+    private String report;
 
-    private int salaryMax;
-    private int salaryMin;
-    private int salaryAvg;
+    @CreationTimestamp(source = SourceType.DB)
+    @Column(updatable = false, name = "created_at", nullable = false)
+    private Instant createdAt;
+    private String path;
 
-    public Report() {
-    }
-
-    public Report(Integer id, String nameDepartment, int numberEmployees, int salaryMax, int salaryMin, int salaryAvg) {
-        this.id = id;
-        this.nameDepartment = nameDepartment;
-        this.numberEmployees = numberEmployees;
-        this.salaryMax = salaryMax;
-        this.salaryMin = salaryMin;
-        this.salaryAvg = salaryAvg;
-    }
-
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public String getNameDepartment() {
-        return nameDepartment;
+    public String getReport() {
+        return report;
     }
 
-    public void setNameDepartment(String nameDepartment) {
-        this.nameDepartment = nameDepartment;
+    public void setReport(String report) {
+        this.report = report;
     }
 
-    public int getNumberEmployees() {
-        return numberEmployees;
+    public Instant getCreatedAt() {
+        return createdAt;
     }
 
-    public void setNumberEmployees(int numberEmployees) {
-        this.numberEmployees = numberEmployees;
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
     }
 
-    public int getSalaryMax() {
-        return salaryMax;
+    public String getPath() {
+        return path;
     }
 
-    public void setSalaryMax(int salaryMax) {
-        this.salaryMax = salaryMax;
-    }
-
-    public int getSalaryMin() {
-        return salaryMin;
-    }
-
-    public void setSalaryMin(int salaryMin) {
-        this.salaryMin = salaryMin;
-    }
-
-    public int getSalaryAvg() {
-        return salaryAvg;
-    }
-
-    public void setSalaryAvg(int salaryAvg) {
-        this.salaryAvg = salaryAvg;
+    public void setPath(String path) {
+        this.path = path;
     }
 }

@@ -3,14 +3,23 @@ package ru.skypro.lessons.springboot.weblibrary.dto;
 import ru.skypro.lessons.springboot.weblibrary.pojo.Employee;
 import ru.skypro.lessons.springboot.weblibrary.pojo.Position;
 
-import java.util.List;
-
 public class EmployeeDTO {
     // Поля для хранения идентификатора, имени и зарплаты сотрудника
     private Integer id;
     private String name;
     private Integer salary;
-    private Position position;
+    private PositionDto position;
+
+    public EmployeeDTO() {
+
+    }
+
+    public EmployeeDTO(Integer id, String name, Integer salary, PositionDto position) {
+        this.id = id;
+        this.name = name;
+        this.salary = salary;
+        this.position = position;
+    }
 
     // Метод для преобразования сущности Employee в объект EmployeeDTO
     public static EmployeeDTO fromEmployee(Employee employee) {
@@ -18,7 +27,9 @@ public class EmployeeDTO {
         employeeDTO.setId(employee.getId());
         employeeDTO.setName(employee.getName());
         employeeDTO.setSalary(employee.getSalary());
-        employeeDTO.setPosition(employee.getPosition());
+        var position = employee.getPosition();
+        var positionDto = new PositionDto(position.getId(), position.getName());
+        employeeDTO.setPosition(positionDto);
         return employeeDTO;
     }
 
@@ -28,7 +39,12 @@ public class EmployeeDTO {
         employee.setId(employeeDTO.getId());
         employee.setName(employeeDTO.getName());
         employee.setSalary(employeeDTO.getSalary());
-        employee.setPosition(employeeDTO.getPosition());
+
+        var positionDto = employeeDTO.getPosition();
+        var position = new Position();
+        position.setId(positionDto.getId());
+        position.setName(positionDto.getName());
+        employee.setPosition(position);
         return employee;
     }
 
@@ -63,7 +79,7 @@ public class EmployeeDTO {
         this.salary = salary;
     }
 
-    public Position getPosition() {
+    public PositionDto getPosition() {
         return position;
     }
 
@@ -77,7 +93,7 @@ public class EmployeeDTO {
                 '}';
     }
 
-    public void setPosition(Position position) {
+    public void setPosition(PositionDto position) {
         this.position = position;
     }
 

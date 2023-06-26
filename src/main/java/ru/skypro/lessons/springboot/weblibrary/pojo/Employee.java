@@ -2,6 +2,8 @@ package ru.skypro.lessons.springboot.weblibrary.pojo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import ru.skypro.lessons.springboot.weblibrary.dto.PositionDto;
+
 @Entity
 @Table(name = "employee")
 public class Employee {
