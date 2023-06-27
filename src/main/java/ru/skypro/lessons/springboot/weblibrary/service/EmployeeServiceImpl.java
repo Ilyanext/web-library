@@ -3,6 +3,7 @@ package ru.skypro.lessons.springboot.weblibrary.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.transaction.Transactional;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
@@ -186,7 +187,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
 
     }
-
+    @Transactional
     @Override
     public Resource findReport(int id) {
         return new ByteArrayResource(reportRepository.findAllById(id)
@@ -194,7 +195,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .getReport()
                 .getBytes(StandardCharsets.UTF_8));
     }
-
+    @Transactional
     @Override
     public File findReportFile(int id) {
         return reportRepository.findById(id)
