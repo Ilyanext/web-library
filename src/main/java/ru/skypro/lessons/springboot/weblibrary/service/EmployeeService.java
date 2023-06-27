@@ -1,29 +1,33 @@
 package ru.skypro.lessons.springboot.weblibrary.service;
 
 import jakarta.annotation.Nullable;
-import org.springframework.data.repository.query.Param;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.RequestBody;
-import ru.skypro.lessons.springboot.weblibrary.dto.EmployeeDto;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.lessons.springboot.weblibrary.dto.EmployeeDTO;
 import ru.skypro.lessons.springboot.weblibrary.dto.EmployeeFullInfo;
 import ru.skypro.lessons.springboot.weblibrary.pojo.Employee;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 public interface EmployeeService {
-    List<EmployeeDto> getAllEmployees();
+    List<Employee> getAllEmployees();
 
-    List<EmployeeDto> getEmployees();
+    Iterable<Employee> getEmployees();
 
     public Integer showSalary();
+    Integer showAvgSalary();
 
-    public List<EmployeeDto> showSalaryMin();
+    public List<EmployeeDTO> showSalaryMin();
 
-    public List<EmployeeDto> showSalaryMax();
+    public List<EmployeeDTO> showSalaryMax();
 
-    public List<EmployeeDto> getEmployeesWithSalaryHigherThan(Integer salary);
+    public List<EmployeeDTO> getEmployeesWithSalaryHigherThan(Integer salary);
 
-    public List<EmployeeDto> getEmployeesByIdWithRequired(Integer id);
+    public List<EmployeeDTO> getEmployeesByIdWithRequired(Integer id);
 
     void deleteEmployeesWithId(int id);
 
@@ -34,12 +38,21 @@ public interface EmployeeService {
 
 
     void editEmployee(@RequestBody int id);
-    List<EmployeeDto> findByIdGreaterThan(int number);
+    List<EmployeeDTO> findByIdGreaterThan(int number);
 
 
     List<EmployeeFullInfo> getEmployeesFull(int id);
     List<EmployeeFullInfo> getEmployeesFullPosition(@Nullable String position);
     List<EmployeeFullInfo> withHighestSalary();
-    List<EmployeeDto> getEmployeesWithPaging(int page, int size);
+    List<EmployeeFullInfo> withLowSalary();
+    List<EmployeeDTO> getEmployeesWithPaging(int page, int size);
+    void uploadFile(@RequestParam("file") MultipartFile file) throws IOException;
+    int generateReport();
+     Resource findReport(int id);
+
+    File findReportFile(int id);
+
+    String generateReportFile (String content);
+
 }
 

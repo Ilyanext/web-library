@@ -1,25 +1,23 @@
 package ru.skypro.lessons.springboot.weblibrary.pojo;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import ru.skypro.lessons.springboot.weblibrary.dto.PositionDto;
 
 @Entity
 @Table(name = "employee")
 public class Employee {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @JsonProperty("id")private Integer id;
 
-    private String name;
-    private int salary;
+    @JsonProperty("name")private String name;
+    @JsonProperty("salary")private int salary;
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "position_id")
+    @JsonProperty("position")
     private Position position;
     public Employee() {
-    }
-
-    public Position getPosition() {
-        return position;
     }
 
     public void setPosition(Position position) {
@@ -33,10 +31,8 @@ public class Employee {
         this.position = position;
     }
 
-    public Employee(Integer id, String name, int salary) {
-        this.id = id;
-        this.name = name;
-        this.salary = salary;
+    public Position getPosition() {
+        return position;
     }
 
     public Integer getId() {
@@ -61,5 +57,15 @@ public class Employee {
 
     public void setSalary(int salary) {
         this.salary = salary;
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", salary=" + salary +
+                ", position=" + position +
+                '}';
     }
 }

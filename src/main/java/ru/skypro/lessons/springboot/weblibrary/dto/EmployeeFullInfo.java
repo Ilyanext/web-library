@@ -6,7 +6,8 @@ public class EmployeeFullInfo {
     // Зарплата сотрудника
     private Integer salary;
     // Название должности сотрудника
-    private String positionName;
+    private String position;
+
 
 
     // Конструктор класса EmployeeFullInfo
@@ -14,15 +15,26 @@ public class EmployeeFullInfo {
         this.id = id;
         this.name = name;
         this.salary = salary;
-        this.positionName = positionName;
+        this.position = positionName;
     }
     public EmployeeFullInfo( String name, Integer salary, String positionName) {
         this.name = name;
         this.salary = salary;
-        this.positionName = positionName;
+        this.position = positionName;
+    }
+    public EmployeeFullInfo(){
+
     }
     public int getId() {
         return id;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
     }
 
     public void setId(int id) {
@@ -46,10 +58,20 @@ public class EmployeeFullInfo {
     }
 
     public String getPositionName() {
-        return positionName;
+        return position;
     }
 
     public void setPositionName(String positionName) {
-        this.positionName = positionName;
+        this.position = positionName;
+    }
+
+    @Override
+    public String toString() {
+        return "EmployeeFullInfo{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", salary=" + salary +
+                ", position='" + position + '\'' +
+                '}';
     }
 }
