@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
@@ -19,9 +21,10 @@ import ru.skypro.lessons.springboot.weblibrary.repository.EmployeeRepository;
 import ru.skypro.lessons.springboot.weblibrary.repository.PaginEmployeeRepository;
 import ru.skypro.lessons.springboot.weblibrary.repository.ReportRepository;
 
-import java.io.*;
-import java.net.URI;
-import java.net.URL;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Comparator;
 import java.util.List;
@@ -33,7 +36,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final ReportRepository reportRepository;
     private final PaginEmployeeRepository paginEmployeeRepository;
-
+    Logger logger = LoggerFactory.getLogger(EmployeeServiceImpl.class);
     private final ObjectMapper objectMapper;
     private final Optional optional;
 
@@ -47,6 +50,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List<Employee> getAllEmployees() {
+        logger.info("Getting all employees");
         return employeeRepository.findAllEmployees().stream()
                 .map(EmployeeDTO::toEmployee)
                 .collect(Collectors.toList());
@@ -59,7 +63,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Integer showSalary() {
+
         Integer sum = getEmployees().stream().map(Employee::getSalary).reduce(0, Integer::sum);
+        logger.info("The amount = " + sum);
         return sum;
     }
 
@@ -68,6 +74,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         Integer count = getEmployees().size();
         Integer avg = showSalary() / count;
+        logger.info("Аverage salary = " + avg);
         return avg;
     }
 
@@ -80,6 +87,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .min(comparator)
                 .stream()
                 .collect(Collectors.toList());
+        logger.info("Minimum salary = " + minSalary);
         return minSalary;
     }
 
@@ -90,6 +98,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .max(comparator)
                 .stream()
                 .collect(Collectors.toList());
+        logger.info("Maximum salary = " + maxSalary);
         return maxSalary;
     }
 
@@ -97,17 +106,20 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public List<EmployeeDTO> getEmployeesWithSalaryHigherThan(Integer salary) {
         List<EmployeeDTO> salaryEmployeeBigerThenSalary = getEmployees().stream().map(EmployeeDTO::fromEmployee).filter(i -> i.getSalary() >= salary).toList();
+        logger.info("The salary is more than indicated at the entrance = " + salaryEmployeeBigerThenSalary);
         return salaryEmployeeBigerThenSalary;
     }
 
     @Override
     public List<EmployeeDTO> getEmployeesByIdWithRequired(Integer id) {
         List<EmployeeDTO> getIdEmplyee = getEmployees().stream().map(EmployeeDTO::fromEmployee).filter(i -> i.equals(getEmployees().get(id))).toList();
+        logger.info("There is such an employee");
         return getIdEmplyee;
     }
 
     @Override
     public void deleteEmployeesWithId(int id) {
+        logger.debug("Delete employee with ID = " + id);
         employeeRepository.deleteById(id);
     }
 
@@ -115,38 +127,45 @@ public class EmployeeServiceImpl implements EmployeeService {
     // Метод для добавления нового сотрудника
     @Override
     public void addEmployee(Employee employee) {
+        logger.debug("Create employee: {}", employee);
         employeeRepository.save(employee);
     }
 
     @Override
     public void editEmployee(int id) {
+        logger.debug("Edit employee with ID: {} ", id);
         getEmployees().get(id);
     }
 
     @Override
     public List<EmployeeDTO> findByIdGreaterThan(int number) {
+        logger.info("Find employee by id greater than: {} ", number);
         return employeeRepository.findByIdGreaterThan(10000);
     }
 
 
     @Override
     public List<EmployeeFullInfo> getEmployeesFull(int id) {
+        logger.debug("Get all info employee by id = " + id);
         return employeeRepository.findAllEmployeeFullInfo(id);
     }
 
     @Override
     public List<EmployeeFullInfo> getEmployeesFullPosition(String position) {
+        logger.debug("Get employe by position: {}", position);
         return employeeRepository.getEmployeesFullPosition(position);
 
     }
 
     @Override
     public List<EmployeeFullInfo> withHighestSalary() {
+        logger.info("Select employee with highest salsry.");
         return employeeRepository.withHighestSalary();
     }
 
     @Override
     public List<EmployeeFullInfo> withLowSalary() {
+        logger.info("Select employee with low salsry.");
         return employeeRepository.withLowSalary();
     }
 
@@ -155,7 +174,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     public List<EmployeeDTO> getEmployeesWithPaging(int page, int size) {
         Pageable employeeOfConcretePage = PageRequest.of(page, size);
         Page<EmployeeDTO> allPage = employeeRepository.findAll(employeeOfConcretePage);
-
+        logger.info("Create paging, wherer page = {}, size = {}", page, size);
         return allPage.stream()
                 .toList();
     }
@@ -168,11 +187,12 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .map(EmployeeDTO::toEmployee)
                 .collect(Collectors.toList());
         employeeRepository.saveAll(newEmployee);
-
+        logger.debug("Transferred the file, and saved the new employees: {}", newEmployee);
     }
 
     @Override
     public int generateReport() {
+        logger.debug("Create report");
         var report = employeeRepository.buildReport();
         try {
             var content = objectMapper.writeValueAsString(report);
@@ -182,22 +202,29 @@ public class EmployeeServiceImpl implements EmployeeService {
             reportEntity.setReport(content);
             reportEntity.setPath(path);
             return reportRepository.save(reportEntity).getId();
+
         } catch (JsonProcessingException e) {
+            logger.error("Cannot generate report");
             throw new IllegalStateException("Cannot generate report", e);
         }
 
     }
+
     @Transactional
     @Override
     public Resource findReport(int id) {
+        logger.info("Find report by id: {} ", id);
         return new ByteArrayResource(reportRepository.findAllById(id)
-                .orElseThrow(()->new IllegalStateException("Report with id " + id + " not found"))
+                .orElseThrow(() -> new IllegalStateException("Report with id " + id + " not found"))
                 .getReport()
                 .getBytes(StandardCharsets.UTF_8));
+
     }
+
     @Transactional
     @Override
     public File findReportFile(int id) {
+        logger.info("Find report file by id: {}", id);
         return reportRepository.findById(id)
                 .map(Report::getPath)
                 .map(File::new)
@@ -207,10 +234,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public String generateReportFile(String content) {
+        logger.debug("Create report in file");
         var f = new File("report_" + System.currentTimeMillis() + ".json");
         try (var writer = new FileWriter(f)) {
             writer.write(content);
         } catch (IOException e) {
+            logger.error("Cannot generate report file");
             throw new UncheckedIOException("Cannot generate report file", e);
         }
         return f.getName();
