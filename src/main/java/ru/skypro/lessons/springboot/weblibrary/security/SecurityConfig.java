@@ -22,26 +22,26 @@ import ru.skypro.lessons.springboot.weblibrary.pojo.Role;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-//@Bean
-//public SecurityFilterChain securityFilterChain (HttpSecurity httpSecurity) throws Exception{
-//    return httpSecurity
-//            .csrf(AbstractHttpConfigurer::disable)
-//            .formLogin(Customizer.withDefaults())
-//            .logout(Customizer.withDefaults())
-//            .sessionManagement(Customizer.withDefaults())
-//            .httpBasic(Customizer.withDefaults())
-//            .authorizeHttpRequests(
-//                    matcherRegistry-> matcherRegistry
-//                            .requestMatchers(HttpMethod.POST,"/employee/**","/report/**")
-//                            .hasRole(ru.skypro.lessons.springboot.weblibrary.pojo.Role.ADMIN.name())
-//                            .requestMatchers(HttpMethod.PUT, "employee/**").hasRole(Role.ADMIN.name())
-//                            .requestMatchers(HttpMethod.DELETE, "employee/**").hasRole(Role.ADMIN.name())
-//                            .requestMatchers(HttpMethod.GET, "employee/**", "/report/**")
-//                            .hasAnyRole(Role.ADMIN.name(), Role.USER.name())
-//                            .requestMatchers("/**").permitAll()
-//            )
-//            .build();
-//}
+@Bean
+public SecurityFilterChain securityFilterChain (HttpSecurity httpSecurity) throws Exception{
+    return httpSecurity
+            .csrf(AbstractHttpConfigurer::disable)
+            .formLogin(Customizer.withDefaults())
+            .logout(Customizer.withDefaults())
+            .sessionManagement(Customizer.withDefaults())
+            .httpBasic(Customizer.withDefaults())
+            .authorizeHttpRequests(
+                    matcherRegistry-> matcherRegistry
+                            .requestMatchers(HttpMethod.POST,"/employee/**","/report/**")
+                            .hasRole(ru.skypro.lessons.springboot.weblibrary.pojo.Role.ADMIN.name())
+                            .requestMatchers(HttpMethod.PUT, "employee/**").hasRole(Role.ADMIN.name())
+                            .requestMatchers(HttpMethod.DELETE, "employee/**").hasRole(Role.ADMIN.name())
+                            .requestMatchers(HttpMethod.GET, "employee/**", "/report/**")
+                            .hasAnyRole(Role.ADMIN.name(), Role.USER.name())
+                            .requestMatchers("/**").permitAll()
+            )
+            .build();
+}
 @Bean
 public UserDetailsManager userDetailsManager(PasswordEncoder passwordEncoder) {
 
