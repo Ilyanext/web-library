@@ -4,7 +4,7 @@ databaseChangeLog:
       author: developer # имя разработчика, который добавил набор изменений
       changes: # список изменений в этом наборе
         - createTable: # команда liquibase — создает таблицу
-            tableName: employee # название таблицы
+            tableName: app_User # название таблицы
             columns: # колонки к данной таблице
               - column: # колонка
                   name: id # название колонки
@@ -13,25 +13,17 @@ databaseChangeLog:
                   constraints: # ограничения колонки
                     primaryKey: true
               - column:
-                  name: name
+                  name: login
                   type: varchar (255)
                   constraints:
                     nullable: false
               - column:
-                  name: salary
-                  type: int
+                  name: password
+                  type: varchar (255)
                   constraints:
                     nullable: false
               - column:
-                  name: position
-                  type: varchar(255)
+                  name: role
+                  type: varchar (255)
                   constraints:
-                    foreignKeyName: position_id
-              - column:
-                  name: report
-                  type: varchar(255)
-                  constraints:
-                    foreignKeyName: report_id
-
-
-
+                    nullable: false
