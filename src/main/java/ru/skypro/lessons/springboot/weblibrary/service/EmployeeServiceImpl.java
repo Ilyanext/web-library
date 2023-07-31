@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
@@ -41,13 +40,17 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final ObjectMapper objectMapper;
     private final Optional optional;
 
+
     public EmployeeServiceImpl(EmployeeRepository employeeRepository, ReportRepository reportRepository, PaginEmployeeRepository paginEmployeeRepository, ObjectMapper objectMapper, Optional optional) {
+
         this.employeeRepository = employeeRepository;
         this.reportRepository = reportRepository;
         this.paginEmployeeRepository = paginEmployeeRepository;
         this.objectMapper = objectMapper;
         this.optional = optional;
     }
+
+
 
     @Override
     public List<Employee> getAllEmployees() {
