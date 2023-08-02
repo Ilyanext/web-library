@@ -55,12 +55,6 @@ public class EmployeeServiceImplTest {
 
     }
 
-//    @Test
-//    public void getEmployees_OK() {
-//        when(mockRepository.findAll()).thenReturn(employeesTest());
-//        List<Employee> employee = employeeService.getAllEmployees();
-//        assertEquals(employeesTest().size(), employee.size());
-//    }
 
     @Test
     void withHighestSalary_Ok() {
