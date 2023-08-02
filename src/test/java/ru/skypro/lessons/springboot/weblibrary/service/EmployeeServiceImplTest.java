@@ -97,20 +97,22 @@ public class EmployeeServiceImplTest {
         assertEquals(employees.size(), fullInfos.size());
     }
 
+
     @Test
-    void getEmployeeWithPaging_OK() {
+    void getEmployeeWithPaging_OK1() {
         int pageIndex = 1;
         int pageSize = 10;
 
-        Page<Employee> employeePage = new PageImpl<>(employeesTest());
         List<EmployeeDTO> employeeDTO = employeesTest().stream().map(EmployeeDTO::fromEmployee).collect(Collectors.toList());
+
+
+        Page<EmployeeDTO> employeePage = new PageImpl<>(employeeDTO);
         when(mockRepository.findAll(any(Pageable.class))).thenReturn((Page) employeePage);
 
         List<EmployeeDTO> actualEmployeeDTOList = employeeService.getEmployeesWithPaging(pageIndex, pageSize);
 
         assertEquals(employeeDTO, actualEmployeeDTOList);
     }
-
     @Test
     void upload_NO_OK_Exception() throws NullPointerException {
         MockMultipartFile mockMultipartFile = new MockMultipartFile(
