@@ -69,8 +69,8 @@ public class EmployeeController {
     }
 
     @PutMapping("{id}")
-    public void editEmployee(@RequestBody int id) {
-        employeeService.editEmployee(id);
+    public void editEmployee(@PathVariable int id, @RequestBody Employee employee) {
+        employeeService.editEmployee(id, employee );
     }
 
     @GetMapping("fullInfo")

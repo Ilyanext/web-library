@@ -36,8 +36,6 @@ public interface EmployeeService {
     void addEmployee(@RequestBody Employee employee);
 
 
-
-    void editEmployee(@RequestBody int id);
     List<EmployeeDTO> findByIdGreaterThan(int number);
 
 
@@ -54,5 +52,6 @@ public interface EmployeeService {
 
     String generateReportFile (String content);
 
+    void editEmployee(int id, Employee employee);
 }
 

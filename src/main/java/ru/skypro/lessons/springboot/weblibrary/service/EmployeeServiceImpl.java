@@ -133,10 +133,12 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void editEmployee(int id) {
+    public void editEmployee(int id, Employee employee) {
         logger.debug("Edit employee with ID: {} ", id);
-        getEmployees().get(id);
+        addEmployee(employee);
     }
+
+
 
     @Override
     public List<EmployeeDTO> findByIdGreaterThan(int number) {
@@ -245,6 +247,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
         return f.getName();
     }
+
+
 
 
 }
