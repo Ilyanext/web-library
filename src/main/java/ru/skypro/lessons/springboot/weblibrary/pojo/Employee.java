@@ -2,7 +2,6 @@ package ru.skypro.lessons.springboot.weblibrary.pojo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import ru.skypro.lessons.springboot.weblibrary.dto.PositionDto;
 
 @Entity
 @Table(name = "employee")
@@ -17,7 +16,11 @@ public class Employee {
     @JoinColumn(name = "position_id")
     @JsonProperty("position")
     private Position position;
+    public Employee(int i, String kir, int i1, Position pos, Report rep) {
+    }
+
     public Employee() {
+
     }
 
     public void setPosition(Position position) {
