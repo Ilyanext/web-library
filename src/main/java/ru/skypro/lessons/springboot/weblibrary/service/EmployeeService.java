@@ -43,7 +43,7 @@ public interface EmployeeService {
     List<EmployeeFullInfo> getEmployeesFullPosition(@Nullable String position);
     List<EmployeeFullInfo> withHighestSalary();
     List<EmployeeFullInfo> withLowSalary();
-    List<EmployeeDTO> getEmployeesWithPaging(int page, int size);
+    List<Employee> getEmployeesWithPaging(int page, int size);
     void uploadFile(@RequestParam("file") MultipartFile file) throws IOException;
     int generateReport();
      Resource findReport(int id);

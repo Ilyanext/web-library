@@ -70,7 +70,7 @@ public class EmployeeController {
 
     @PutMapping("{id}")
     public void editEmployee(@PathVariable int id, @RequestBody Employee employee) {
-        employeeService.editEmployee(id, employee );
+        employeeService.editEmployee(id, employee);
     }
 
     @GetMapping("fullInfo")
@@ -78,9 +78,9 @@ public class EmployeeController {
         return employeeService.getEmployeesFull(id);
     }
 
-    @GetMapping("/paging/page")
-    public List<EmployeeDTO> getEmployeesWithPaging(@RequestParam("page") int page) {
-        return employeeService.getEmployeesWithPaging(page, 10);
+    @GetMapping("/paging/{page}/{size}")
+    public List<Employee> getEmployeesWithPaging(@RequestParam("page") int page,@RequestParam("size") int size) {
+        return employeeService.getEmployeesWithPaging(page, size);
     }
 
     @GetMapping("/withHighestSalary")

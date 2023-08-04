@@ -1,5 +1,6 @@
 package ru.skypro.lessons.springboot.weblibrary.pojo;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
@@ -14,6 +15,7 @@ public class Employee {
     @JsonProperty("salary")private int salary;
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "position_id")
+    @JsonBackReference
     @JsonProperty("position")
     private Position position;
     public Employee(int i, String kir, int i1, Position pos, Report rep) {

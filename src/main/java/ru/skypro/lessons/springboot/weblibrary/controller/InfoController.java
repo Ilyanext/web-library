@@ -1,5 +1,6 @@
 package ru.skypro.lessons.springboot.weblibrary.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +13,7 @@ import ru.skypro.lessons.springboot.weblibrary.service.EmployeeService;
 @RequestMapping("/appInfo")
 public class InfoController {
 
-    @Value("test")
+    @Value("dev")
     public String appEnv;
 
     @GetMapping

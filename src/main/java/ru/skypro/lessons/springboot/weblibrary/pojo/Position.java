@@ -1,5 +1,6 @@
 package ru.skypro.lessons.springboot.weblibrary.pojo;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -15,6 +16,7 @@ public class Position {
 
 
     @OneToMany(mappedBy = "position")
+    @JsonManagedReference
     private List<Employee> employee;
     public Position() {
 

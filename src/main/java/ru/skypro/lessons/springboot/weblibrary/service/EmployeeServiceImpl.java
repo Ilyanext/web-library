@@ -51,7 +51,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
 
-
     @Override
     public List<Employee> getAllEmployees() {
         logger.info("Getting all employees");
@@ -142,7 +141,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
 
-
     @Override
     public List<EmployeeDTO> findByIdGreaterThan(int number) {
         logger.info("Find employee by id greater than: {} ", number);
@@ -177,12 +175,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 
     @Override
-    public List<EmployeeDTO> getEmployeesWithPaging(int page, int size) {
+    public List<Employee> getEmployeesWithPaging(int page, int size) {
         Pageable employeeOfConcretePage = PageRequest.of(page, size);
-        Page<EmployeeDTO> allPage = employeeRepository.findAll(employeeOfConcretePage);
+        Page<Employee> pages =  paginEmployeeRepository.findAll(employeeOfConcretePage);
+
         logger.info("Create paging, wherer page = {}, size = {}", page, size);
-        return allPage.stream()
-                .toList();
+        return pages.stream().toList();
     }
 
     @Override

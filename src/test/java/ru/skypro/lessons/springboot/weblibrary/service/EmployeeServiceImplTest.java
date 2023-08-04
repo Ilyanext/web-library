@@ -16,6 +16,7 @@ import ru.skypro.lessons.springboot.weblibrary.pojo.Employee;
 import ru.skypro.lessons.springboot.weblibrary.pojo.Position;
 import ru.skypro.lessons.springboot.weblibrary.pojo.Report;
 import ru.skypro.lessons.springboot.weblibrary.repository.EmployeeRepository;
+import ru.skypro.lessons.springboot.weblibrary.repository.PaginEmployeeRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +43,8 @@ public class EmployeeServiceImplTest {
     private EmployeeRepository mockRepository;
     @InjectMocks
     private EmployeeServiceImpl employeeService;
+    @Mock
+    private PaginEmployeeRepository paginEmployeeRepository;
 
     @Test
     public void getAllEmployees_Test_OK() {
@@ -101,9 +104,9 @@ public class EmployeeServiceImplTest {
 
 
         Page<EmployeeDTO> employeePage = new PageImpl<>(employeeDTO);
-        when(mockRepository.findAll(any(Pageable.class))).thenReturn((Page) employeePage);
+        when(paginEmployeeRepository.findAll(any(Pageable.class))).thenReturn((Page) employeePage);
 
-        List<EmployeeDTO> actualEmployeeDTOList = employeeService.getEmployeesWithPaging(pageIndex, pageSize);
+        List<Employee> actualEmployeeDTOList = employeeService.getEmployeesWithPaging(pageIndex, pageSize);
 
         assertEquals(employeeDTO, actualEmployeeDTOList);
     }

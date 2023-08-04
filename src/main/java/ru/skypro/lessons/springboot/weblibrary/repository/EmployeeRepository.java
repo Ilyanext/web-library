@@ -20,7 +20,7 @@ public interface EmployeeRepository extends CrudRepository<Employee, Integer> {
 
     List<EmployeeDTO> findByIdGreaterThan(int number);
 
-    Page<EmployeeDTO> findAll(Pageable employeeOfConcretePage);
+//    Page<Employee> findAll(Pageable employeeOfConcretePage);
 
     @Query("SELECT new ru.skypro.lessons.springboot.weblibrary.dto." +
             "EmployeeFullInfo(e.id, e.name , e.salary , p.name) " +
