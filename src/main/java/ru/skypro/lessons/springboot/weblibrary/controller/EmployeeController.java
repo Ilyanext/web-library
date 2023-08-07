@@ -23,7 +23,7 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public Iterable<Employee> showEmployee() {
+    public List<Employee> showEmployee() {
         return employeeService.getEmployees();
     }
 
@@ -63,14 +63,14 @@ public class EmployeeController {
         employeeService.deleteEmployeesWithId(id);
     }
 
-    @PostMapping("/")
+    @PostMapping
     public void addEmployee(@RequestBody Employee employee) {
         employeeService.addEmployee(employee);
     }
 
     @PutMapping("{id}")
     public void editEmployee(@PathVariable int id, @RequestBody Employee employee) {
-        employeeService.editEmployee(id, employee);
+        employeeService.update(id,employee);
     }
 
     @GetMapping("fullInfo")

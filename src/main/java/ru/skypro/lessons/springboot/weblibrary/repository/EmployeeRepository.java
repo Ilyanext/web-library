@@ -1,7 +1,5 @@
 package ru.skypro.lessons.springboot.weblibrary.repository;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -10,9 +8,12 @@ import ru.skypro.lessons.springboot.weblibrary.dto.EmployeeFullInfo;
 import ru.skypro.lessons.springboot.weblibrary.dto.ReportDto;
 import ru.skypro.lessons.springboot.weblibrary.pojo.Employee;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface EmployeeRepository extends CrudRepository<Employee, Integer> {
+    List<Employee> employees = new ArrayList<>();
+
     @Query(value = "SELECT * FROM employee",
             nativeQuery = true)
     List<EmployeeDTO> findAllEmployees();
@@ -52,7 +53,25 @@ public interface EmployeeRepository extends CrudRepository<Employee, Integer> {
             "FROM Employee e  group by e.position ")
     List<ReportDto> buildReport();
 
-    @Query (value = "update employee set name = :name, " +
-                    "salary = :salary where id = :id", nativeQuery = true)
+    @Query(value = "update employee set name = :name, " +
+            "salary = :salary where id = :id", nativeQuery = true)
     void updateEmployee(int id, String name, int salary);
+
+    public default void update(int id, Employee oldEmployee) {
+        int index = findIndexById(id);
+        if (index != -1) {
+            employees.set(index, oldEmployee);
+        }
+    }
+
+    private int findIndexById(int id) {
+        int index = -1;
+        for (int i = 0; i < employees.size(); i++) {
+            if (employees.get(i).getId() == id) {
+                index = i;
+                break;
+            }
+        }
+        return index;
+    }
 }

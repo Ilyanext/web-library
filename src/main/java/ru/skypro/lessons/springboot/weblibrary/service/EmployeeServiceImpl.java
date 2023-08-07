@@ -26,6 +26,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -134,10 +135,15 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeRepository.save(employee);
     }
 
+
+
     @Override
-    public void editEmployee(int id, Employee employee) {
+    public void update(int id, Employee employee) {
         logger.debug("Edit employee with ID: {} ", id);
-        addEmployee(employee);
+        Employee oldEmployee = employeeRepository.findById(id).orElseThrow(()-> new NullPointerException());
+        oldEmployee.setSalary(employee.getSalary());
+        oldEmployee.setName(employee.getName());
+        employeeRepository.update(id,oldEmployee);
     }
 
 

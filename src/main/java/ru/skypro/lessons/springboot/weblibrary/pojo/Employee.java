@@ -18,11 +18,21 @@ public class Employee {
     @JsonBackReference
     @JsonProperty("position")
     private Position position;
-    public Employee(int i, String kir, int i1, Position pos, Report rep) {
-    }
+
 
     public Employee() {
 
+    }
+
+
+    public Employee(String name, int salary, Position position) {
+        this.name = name;
+        this.salary = salary;
+        this.position = position;
+    }
+
+    public Employee(String name) {
+        this.name = name;
     }
 
     public void setPosition(Position position) {

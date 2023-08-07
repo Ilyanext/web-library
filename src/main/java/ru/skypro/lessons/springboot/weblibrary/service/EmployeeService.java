@@ -16,9 +16,10 @@ import java.util.List;
 public interface EmployeeService {
     List<Employee> getAllEmployees();
 
-    Iterable<Employee> getEmployees();
+    List<Employee> getEmployees();
 
     public Integer showSalary();
+
     Integer showAvgSalary();
 
     public List<EmployeeDTO> showSalaryMin();
@@ -32,7 +33,6 @@ public interface EmployeeService {
     void deleteEmployeesWithId(int id);
 
 
-
     void addEmployee(@RequestBody Employee employee);
 
 
@@ -40,18 +40,26 @@ public interface EmployeeService {
 
 
     List<EmployeeFullInfo> getEmployeesFull(int id);
+
     List<EmployeeFullInfo> getEmployeesFullPosition(@Nullable String position);
+
     List<EmployeeFullInfo> withHighestSalary();
+
     List<EmployeeFullInfo> withLowSalary();
+
     List<Employee> getEmployeesWithPaging(int page, int size);
+
     void uploadFile(@RequestParam("file") MultipartFile file) throws IOException;
+
     int generateReport();
-     Resource findReport(int id);
+
+    Resource findReport(int id);
 
     File findReportFile(int id);
 
-    String generateReportFile (String content);
+    String generateReportFile(String content);
 
-    void editEmployee(int id, Employee employee);
+
+    void update(int id, Employee employee);
 }
 

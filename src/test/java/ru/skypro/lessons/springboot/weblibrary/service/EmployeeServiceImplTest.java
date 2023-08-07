@@ -77,7 +77,7 @@ public class EmployeeServiceImplTest {
         employees.add(employeeKit);
         when(mockRepository.getEmployeesFullPosition(String.valueOf(Optional.of(position)))).thenReturn(employees);
         List<EmployeeFullInfo> expected = new ArrayList<>();
-        expected.add(employeeLila);
+        expected.add(employeeIlya);
 
         List<EmployeeFullInfo> result = employeeService.getEmployeesFullPosition(String.valueOf(Optional.of(position)));
         assertEquals(expected.get(0).getName(), result.get(0).getName());
