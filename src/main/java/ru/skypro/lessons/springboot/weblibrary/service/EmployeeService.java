@@ -33,7 +33,7 @@ public interface EmployeeService {
     void deleteEmployeesWithId(int id);
 
 
-    void addEmployee(@RequestBody Employee employee);
+    void addEmployee(List <Employee> employee);
 
 
     List<EmployeeDTO> findByIdGreaterThan(int number);

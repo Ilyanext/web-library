@@ -26,7 +26,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -130,20 +129,20 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     // Метод для добавления нового сотрудника
     @Override
-    public void addEmployee(Employee employee) {
-        logger.debug("Create employee: {}", employee);
-        employeeRepository.save(employee);
+    public void addEmployee(List<Employee> employees) {
+        logger.debug("Create employee: {}", employees);
+        employees.forEach(employeeRepository::save);
+//        return employeeRepository.save(employees);
     }
-
 
 
     @Override
     public void update(int id, Employee employee) {
         logger.debug("Edit employee with ID: {} ", id);
-        Employee oldEmployee = employeeRepository.findById(id).orElseThrow(()-> new NullPointerException());
+        Employee oldEmployee = employeeRepository.findById(id).orElseThrow(() -> new NullPointerException());
         oldEmployee.setSalary(employee.getSalary());
         oldEmployee.setName(employee.getName());
-        employeeRepository.update(id,oldEmployee);
+        employeeRepository.update(id, oldEmployee);
     }
 
 
@@ -183,7 +182,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public List<Employee> getEmployeesWithPaging(int page, int size) {
         Pageable employeeOfConcretePage = PageRequest.of(page, size);
-        Page<Employee> pages =  paginEmployeeRepository.findAll(employeeOfConcretePage);
+        Page<Employee> pages = paginEmployeeRepository.findAll(employeeOfConcretePage);
 
         logger.info("Create paging, wherer page = {}, size = {}", page, size);
         return pages.stream().toList();

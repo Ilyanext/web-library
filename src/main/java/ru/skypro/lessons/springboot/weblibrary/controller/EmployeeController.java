@@ -64,7 +64,7 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public void addEmployee(@RequestBody Employee employee) {
+    public void addEmployee(@RequestBody List<Employee> employee) {
         employeeService.addEmployee(employee);
     }
 

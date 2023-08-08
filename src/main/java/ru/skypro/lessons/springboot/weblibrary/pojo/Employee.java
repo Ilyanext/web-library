@@ -24,6 +24,10 @@ public class Employee {
 
     }
 
+    public Employee(Integer id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 
     public Employee(String name, int salary, Position position) {
         this.name = name;

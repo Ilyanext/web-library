@@ -61,16 +61,8 @@ public class EmployeeControllerTest {
     @Test
     @SneakyThrows
     void addEmployee_test() throws Exception {
-//        Employee employee = new Employee(1, "Alex", 1200, new Position(0, "developer"));
-//        mockMvc.perform(post("/employee"))
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .contentType(objectMapper.writeValueAsString(employee))
-//                .andExpect(status().isCreated())
-//                .andExpect(jsonPath("$.id").isNumber())
-//                .andExpect(jsonPath("$.name").value("Alex"));
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("name", "test_name");
-
+        jsonObject.put( "name", "test_name");
         mockMvc.perform(post("/employee")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonObject.toString()))
@@ -82,14 +74,16 @@ public class EmployeeControllerTest {
     }
 
     @Test
+    @SneakyThrows
     void editEmployee_changName() throws Exception {
         int id = createTestEmployee("Nick").getId();
 //    Employee employee = new Employee(1, "Alex", 1200, new Position(0, "developer"));
-        mockMvc.perform(put("employee/{id}", id))
-                .content(objectMapper.writeValueAsString(new Employee("Michail")))
+        mockMvc.perform(put("/employee/{id}", id)
+                .content(objectMapper.writeValueAsString(new Employee(1,"Michail")))
                 .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value("1"))
+                .andExpect(jsonPath("$.id").isNumber())
                 .andExpect(jsonPath("$.name").value("Michail"));
     }
 
