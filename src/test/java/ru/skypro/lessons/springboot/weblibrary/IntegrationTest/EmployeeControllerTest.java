@@ -36,13 +36,12 @@ public class EmployeeControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @BeforeEach
-    private void cleanData() {
-        employeeRepository.deleteAll();
-    }
+//    @BeforeEach
+//    private void cleanData() {
+//        employeeRepository.deleteAll();
+//    }
 
     @Test
-    @SneakyThrows
     void getEmployeeInDatabase_thenEmptyJsonArray() throws Exception {
         mockMvc.perform(get("/employee")).
                 andExpect(status().isOk()).
@@ -59,7 +58,6 @@ public class EmployeeControllerTest {
     }
 
     @Test
-    @SneakyThrows
     void addEmployee_test() throws Exception {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put( "name", "test_name");
@@ -74,7 +72,6 @@ public class EmployeeControllerTest {
     }
 
     @Test
-    @SneakyThrows
     void editEmployee_changName() throws Exception {
         int id = createTestEmployee("Nick").getId();
 //    Employee employee = new Employee(1, "Alex", 1200, new Position(0, "developer"));

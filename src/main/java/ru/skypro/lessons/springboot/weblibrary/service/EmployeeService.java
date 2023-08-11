@@ -2,7 +2,6 @@ package ru.skypro.lessons.springboot.weblibrary.service;
 
 import jakarta.annotation.Nullable;
 import org.springframework.core.io.Resource;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.lessons.springboot.weblibrary.dto.EmployeeDTO;
@@ -33,8 +32,8 @@ public interface EmployeeService {
     void deleteEmployeesWithId(int id);
 
 
-    void addEmployee(List <Employee> employee);
-
+    //    Employee addEmployee(List <Employee> employee);
+    List<Employee> addEmployee(List<EmployeeDTO> employee);
 
     List<EmployeeDTO> findByIdGreaterThan(int number);
 

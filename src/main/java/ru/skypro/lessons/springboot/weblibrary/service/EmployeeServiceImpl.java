@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.lessons.springboot.weblibrary.dto.EmployeeDTO;
 import ru.skypro.lessons.springboot.weblibrary.dto.EmployeeFullInfo;
+import ru.skypro.lessons.springboot.weblibrary.exeption.EmployeeNotFoundException;
+import ru.skypro.lessons.springboot.weblibrary.exeption.EmployeeNotValidExeption;
 import ru.skypro.lessons.springboot.weblibrary.pojo.Employee;
 import ru.skypro.lessons.springboot.weblibrary.pojo.Report;
 import ru.skypro.lessons.springboot.weblibrary.repository.EmployeeRepository;
@@ -39,15 +41,16 @@ public class EmployeeServiceImpl implements EmployeeService {
     Logger logger = LoggerFactory.getLogger(EmployeeServiceImpl.class);
     private final ObjectMapper objectMapper;
     private final Optional optional;
+    private final EmployeeMapper employeeMapper;
 
-
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository, ReportRepository reportRepository, PaginEmployeeRepository paginEmployeeRepository, ObjectMapper objectMapper, Optional optional) {
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository, ReportRepository reportRepository, PaginEmployeeRepository paginEmployeeRepository, ObjectMapper objectMapper, Optional optional, EmployeeMapper employeeMapper) {
 
         this.employeeRepository = employeeRepository;
         this.reportRepository = reportRepository;
         this.paginEmployeeRepository = paginEmployeeRepository;
         this.objectMapper = objectMapper;
         this.optional = optional;
+        this.employeeMapper = employeeMapper;
     }
 
 
@@ -128,18 +131,30 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 
     // Метод для добавления нового сотрудника
-    @Override
-    public void addEmployee(List<Employee> employees) {
+    public List<Employee> addEmployee(List<EmployeeDTO> employees) {
         logger.debug("Create employee: {}", employees);
-        employees.forEach(employeeRepository::save);
-//        return employeeRepository.save(employees);
+        Optional<EmployeeDTO> incorrectEmployee = employees.stream()
+                .filter(employee -> employee.getSalary() <= 0 || employee.getName() == null ||
+                        employee.getName().isEmpty())
+                .findFirst();
+        if (incorrectEmployee.isPresent()) {
+            throw new EmployeeNotValidExeption(incorrectEmployee.get());
+        }
+        List<Employee> employees1 = (List<Employee>) employeeRepository.saveAll(employees.stream()
+                .map(employeeMapper::toEntity)
+                .collect(Collectors.toList()));
+        employees1.stream()
+                .map(employeeMapper::toDTO)
+                .collect(Collectors.toList());
+        return employees1;
+
     }
 
 
     @Override
     public void update(int id, Employee employee) {
         logger.debug("Edit employee with ID: {} ", id);
-        Employee oldEmployee = employeeRepository.findById(id).orElseThrow(() -> new NullPointerException());
+        Employee oldEmployee = employeeRepository.findById(id).orElseThrow(() -> new EmployeeNotFoundException(employee.getId()));
         oldEmployee.setSalary(employee.getSalary());
         oldEmployee.setName(employee.getName());
         employeeRepository.update(id, oldEmployee);

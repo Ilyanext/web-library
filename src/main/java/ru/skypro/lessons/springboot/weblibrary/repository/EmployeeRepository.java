@@ -1,5 +1,7 @@
 package ru.skypro.lessons.springboot.weblibrary.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -18,10 +20,13 @@ public interface EmployeeRepository extends CrudRepository<Employee, Integer> {
             nativeQuery = true)
     List<EmployeeDTO> findAllEmployees();
 
-
+    default Employee add(Employee employee){
+        employees.add(employee);
+        return employee;
+    }
     List<EmployeeDTO> findByIdGreaterThan(int number);
 
-//    Page<Employee> findAll(Pageable employeeOfConcretePage);
+    Page<Employee> findAll(Pageable employeeOfConcretePage);
 
     @Query("SELECT new ru.skypro.lessons.springboot.weblibrary.dto." +
             "EmployeeFullInfo(e.id, e.name , e.salary , p.name) " +
@@ -53,9 +58,9 @@ public interface EmployeeRepository extends CrudRepository<Employee, Integer> {
             "FROM Employee e  group by e.position ")
     List<ReportDto> buildReport();
 
-    @Query(value = "update employee set name = :name, " +
-            "salary = :salary where id = :id", nativeQuery = true)
-    void updateEmployee(int id, String name, int salary);
+//    @Query(value = "update employee set name = :name, " +
+//            "salary = :salary where id = :id", nativeQuery = true)
+//    void updateEmployee(int id, String name, int salary);
 
     public default void update(int id, Employee oldEmployee) {
         int index = findIndexById(id);
