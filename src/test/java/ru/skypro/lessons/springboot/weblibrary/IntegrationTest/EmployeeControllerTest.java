@@ -3,6 +3,7 @@ package ru.skypro.lessons.springboot.weblibrary.IntegrationTest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import lombok.SneakyThrows;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,12 +13,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import ru.skypro.lessons.springboot.weblibrary.WebLibraryApplication;
 import ru.skypro.lessons.springboot.weblibrary.pojo.Employee;
 import ru.skypro.lessons.springboot.weblibrary.pojo.Position;
 import ru.skypro.lessons.springboot.weblibrary.repository.EmployeeRepository;
 import ru.skypro.lessons.springboot.weblibrary.repository.ReportRepository;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -59,15 +62,16 @@ public class EmployeeControllerTest {
 
     @Test
     void addEmployee_test() throws Exception {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put( "name", "test_name");
+        JSONArray array = new JSONArray()
+                .put(new Employee("Alex"));
+        array.put(new Employee("Ula"));
         mockMvc.perform(post("/employee")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(jsonObject.toString()))
+                        .content(array.toString()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").isNotEmpty())
-                .andExpect(jsonPath("$.id").isNumber())
-                .andExpect(jsonPath("$.name").value("test_name"));
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$[0].name").value("Alex"));
 
     }
 
@@ -76,9 +80,9 @@ public class EmployeeControllerTest {
         int id = createTestEmployee("Nick").getId();
 //    Employee employee = new Employee(1, "Alex", 1200, new Position(0, "developer"));
         mockMvc.perform(put("/employee/{id}", id)
-                .content(objectMapper.writeValueAsString(new Employee(1,"Michail")))
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
+                        .content(objectMapper.writeValueAsString(new Employee(1, "Michail")))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").isNumber())
                 .andExpect(jsonPath("$.name").value("Michail"));
