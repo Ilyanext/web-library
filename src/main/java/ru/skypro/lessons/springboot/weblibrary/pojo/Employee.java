@@ -58,8 +58,9 @@ public class Employee {
         return id;
     }
 
-    public void setId(Integer id) {
+    public int setId(Integer id) {
         this.id = id;
+        return id;
     }
 
     public String getName() {

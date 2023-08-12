@@ -62,12 +62,13 @@ public class EmployeeControllerTest {
         Employee employee = new Employee(1, "Alex", 1200, new Position(0, "developer"));
         mockMvc.perform(delete("/employee/{id}", employee.getId()))
                 .andExpect(status().isOk());
+
     }
 
     @Test
     void addEmployee_test() throws Exception {
         List<Employee> employee = new ArrayList<>();
-        employee.add(new Employee(1, "Alex", 12000, new Position(0,"test")));
+        employee.add(new Employee(1, "Alex", 12000, new Position(0, "test")));
         mockMvc.perform(post("/employee")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(employee)))
@@ -80,10 +81,12 @@ public class EmployeeControllerTest {
 
     @Test
     void editEmployee_changName() throws Exception {
+//        List<Employee> employee = new ArrayList<>();
+//        employee.add(new Employee(1, "Alex", 12000, new Position(0,"test")));
+
         int id = createTestEmployee("Nick").getId();
-//    Employee employee = new Employee(1, "Alex", 1200, new Position(0, "developer"));
         mockMvc.perform(put("/employee/{id}", id)
-                        .content(objectMapper.writeValueAsString(new Employee(1, "Michail")))
+                        .content(objectMapper.writeValueAsString(new Employee("Michail")))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
