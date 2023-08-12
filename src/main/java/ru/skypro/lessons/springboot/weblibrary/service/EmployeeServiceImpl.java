@@ -131,22 +131,19 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 
     // Метод для добавления нового сотрудника
-    public List<Employee> addEmployee(List<EmployeeDTO> employees) {
+    public List<EmployeeDTO> addEmployee(List<Employee> employees) {
         logger.debug("Create employee: {}", employees);
-        Optional<EmployeeDTO> incorrectEmployee = employees.stream()
+        Optional<Employee> incorrectEmployee = employees.stream()
                 .filter(employee -> employee.getSalary() <= 0 || employee.getName() == null ||
                         employee.getName().isEmpty())
                 .findFirst();
         if (incorrectEmployee.isPresent()) {
             throw new EmployeeNotValidExeption(incorrectEmployee.get());
         }
-        List<Employee> employees1 = (List<Employee>) employeeRepository.saveAll(employees.stream()
-                .map(employeeMapper::toEntity)
-                .collect(Collectors.toList()));
-        employees1.stream()
-                .map(employeeMapper::toDTO)
-                .collect(Collectors.toList());
-        return employees1;
+        List<Employee> employees1 = (List<Employee>) employeeRepository.saveAll(employees.stream().collect(Collectors.toList()));
+        List<EmployeeDTO> employeeDTOS =employees1.stream().map(employeeMapper::toDTO).collect(Collectors.toList());
+
+        return employeeDTOS;
 
     }
 

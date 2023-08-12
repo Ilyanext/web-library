@@ -33,7 +33,7 @@ public interface EmployeeService {
 
 
     //    Employee addEmployee(List <Employee> employee);
-    List<Employee> addEmployee(List<EmployeeDTO> employee);
+    List<EmployeeDTO> addEmployee(List<Employee> employee);
 
     List<EmployeeDTO> findByIdGreaterThan(int number);
 

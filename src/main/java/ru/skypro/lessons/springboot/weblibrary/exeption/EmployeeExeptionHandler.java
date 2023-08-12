@@ -17,6 +17,6 @@ public class EmployeeExeptionHandler {
     @ExceptionHandler(EmployeeNotValidExeption.class)
     public ResponseEntity<?> handlerBadrequest (EmployeeNotValidExeption e){
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body("Некорректные данные сотрудника: %s".formatted(e.getEmployeeDTO()));
+                .body("Некорректные данные сотрудника: %s".formatted(e.getEmployee()));
     }
 }

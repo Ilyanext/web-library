@@ -15,10 +15,15 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import ru.skypro.lessons.springboot.weblibrary.WebLibraryApplication;
+import ru.skypro.lessons.springboot.weblibrary.dto.EmployeeDTO;
+import ru.skypro.lessons.springboot.weblibrary.dto.PositionDto;
 import ru.skypro.lessons.springboot.weblibrary.pojo.Employee;
 import ru.skypro.lessons.springboot.weblibrary.pojo.Position;
 import ru.skypro.lessons.springboot.weblibrary.repository.EmployeeRepository;
 import ru.skypro.lessons.springboot.weblibrary.repository.ReportRepository;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -39,10 +44,10 @@ public class EmployeeControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-//    @BeforeEach
-//    private void cleanData() {
-//        employeeRepository.deleteAll();
-//    }
+    @BeforeEach
+    private void cleanData() {
+        employeeRepository.deleteAll();
+    }
 
     @Test
     void getEmployeeInDatabase_thenEmptyJsonArray() throws Exception {
@@ -50,7 +55,6 @@ public class EmployeeControllerTest {
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$").isArray()).
                 andExpect(jsonPath("$").isEmpty());
-
     }
 
     @Test
@@ -62,15 +66,14 @@ public class EmployeeControllerTest {
 
     @Test
     void addEmployee_test() throws Exception {
-        JSONArray array = new JSONArray()
-                .put(new Employee("Alex"));
-        array.put(new Employee("Ula"));
+        List<Employee> employee = new ArrayList<>();
+        employee.add(new Employee(1, "Alex", 12000, new Position(0,"test")));
         mockMvc.perform(post("/employee")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(array.toString()))
+                        .content(objectMapper.writeValueAsString(employee)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$.length()").value(1))
                 .andExpect(jsonPath("$[0].name").value("Alex"));
 
     }
