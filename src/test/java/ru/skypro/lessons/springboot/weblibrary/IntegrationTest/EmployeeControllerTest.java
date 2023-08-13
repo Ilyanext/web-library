@@ -12,8 +12,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 import ru.skypro.lessons.springboot.weblibrary.WebLibraryApplication;
 import ru.skypro.lessons.springboot.weblibrary.dto.EmployeeDTO;
 import ru.skypro.lessons.springboot.weblibrary.dto.PositionDto;
@@ -30,15 +35,27 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+
 @SpringBootTest(classes = WebLibraryApplication.class)
 @AutoConfigureMockMvc(addFilters = false)
 @Transactional
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+@Testcontainers
 public class EmployeeControllerTest {
+    @Container
+    private static final PostgreSQLContainer<?> container = new PostgreSQLContainer<>("postgres:latest")
+            .withUsername("postgres")
+            .withPassword("postgres");
     @Autowired
     MockMvc mockMvc;
     @Autowired
     public EmployeeRepository employeeRepository;
+    @DynamicPropertySource
+    private static void setContainerProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", container::getJdbcUrl);
+        registry.add("spring.datasource.usetname", container::getUsername);
+        registry.add("spring.datasource.password", container::getPassword);
+    }
     @Autowired
     public ReportRepository reportRepository;
     @Autowired
