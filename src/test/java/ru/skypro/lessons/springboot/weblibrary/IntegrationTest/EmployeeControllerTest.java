@@ -81,9 +81,6 @@ public class EmployeeControllerTest {
 
     @Test
     void editEmployee_changName() throws Exception {
-//        List<Employee> employee = new ArrayList<>();
-//        employee.add(new Employee(1, "Alex", 12000, new Position(0,"test")));
-
         int id = createTestEmployee("Nick").getId();
         mockMvc.perform(put("/employee/{id}", id)
                         .content(objectMapper.writeValueAsString(new Employee(id, "Michail")))
