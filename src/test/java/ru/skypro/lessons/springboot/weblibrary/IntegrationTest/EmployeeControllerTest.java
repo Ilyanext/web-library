@@ -1,6 +1,7 @@
 package ru.skypro.lessons.springboot.weblibrary.IntegrationTest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import jakarta.transaction.Transactional;
 import lombok.SneakyThrows;
 import org.json.JSONArray;
@@ -27,6 +28,8 @@ import ru.skypro.lessons.springboot.weblibrary.pojo.Position;
 import ru.skypro.lessons.springboot.weblibrary.repository.EmployeeRepository;
 import ru.skypro.lessons.springboot.weblibrary.repository.ReportRepository;
 
+
+import javax.activation.DataSource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +40,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @SpringBootTest(classes = WebLibraryApplication.class)
-@AutoConfigureMockMvc(addFilters = false)
+@AutoConfigureMockMvc
 @Transactional
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @Testcontainers
@@ -53,11 +56,13 @@ public class EmployeeControllerTest {
     @DynamicPropertySource
     private static void setContainerProperties(DynamicPropertyRegistry registry) {
         registry.add("spring.datasource.url", container::getJdbcUrl);
-        registry.add("spring.datasource.usetname", container::getUsername);
+        registry.add("spring.datasource.username", container::getUsername);
         registry.add("spring.datasource.password", container::getPassword);
     }
-    @Autowired
-    public ReportRepository reportRepository;
+
+
+    @Autowired (required = false)
+    private DataSource dataSource;
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -79,7 +84,6 @@ public class EmployeeControllerTest {
         Employee employee = new Employee(1, "Alex", 1200, new Position(0, "developer"));
         mockMvc.perform(delete("/employee/{id}", employee.getId()))
                 .andExpect(status().isOk());
-
     }
 
     @Test
