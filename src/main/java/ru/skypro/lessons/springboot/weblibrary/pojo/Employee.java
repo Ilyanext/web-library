@@ -1,8 +1,8 @@
 package ru.skypro.lessons.springboot.weblibrary.pojo;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import ru.skypro.lessons.springboot.weblibrary.dto.PositionDto;
 
 @Entity
 @Table(name = "employee")
@@ -15,9 +15,28 @@ public class Employee {
     @JsonProperty("salary")private int salary;
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "position_id")
+    @JsonBackReference
     @JsonProperty("position")
     private Position position;
+
+
     public Employee() {
+
+    }
+
+    public Employee(Integer id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public Employee(String name, int salary, Position position) {
+        this.name = name;
+        this.salary = salary;
+        this.position = position;
+    }
+
+    public Employee(String name) {
+        this.name = name;
     }
 
     public void setPosition(Position position) {
@@ -39,8 +58,9 @@ public class Employee {
         return id;
     }
 
-    public void setId(Integer id) {
+    public int setId(Integer id) {
         this.id = id;
+        return id;
     }
 
     public String getName() {

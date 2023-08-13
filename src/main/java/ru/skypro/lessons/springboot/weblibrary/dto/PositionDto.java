@@ -27,4 +27,12 @@ public class PositionDto
     public void setName(String name) {
         this.name = name;
     }
+
+    @Override
+    public String toString() {
+        return "PositionDto{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

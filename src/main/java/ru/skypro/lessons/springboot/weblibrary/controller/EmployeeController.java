@@ -1,6 +1,8 @@
 package ru.skypro.lessons.springboot.weblibrary.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.lessons.springboot.weblibrary.dto.EmployeeDTO;
@@ -23,7 +25,7 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public Iterable<Employee> showEmployee() {
+    public List<Employee> showEmployee() {
         return employeeService.getEmployees();
     }
 
@@ -58,19 +60,20 @@ public class EmployeeController {
         return employeeService.getEmployeesByIdWithRequired(id);
     }
 
-    @DeleteMapping("{id}")//?
+    @DeleteMapping("{id}")
     public void deleteEmployeesWithId(@PathVariable(required = false) Integer id) {
         employeeService.deleteEmployeesWithId(id);
     }
 
-    @PostMapping("/")
-    public void addEmployee(@RequestBody Employee employee) {
-        employeeService.addEmployee(employee);
+    @PostMapping
+    public List<EmployeeDTO> addEmployee(@RequestBody List<Employee> employees) {
+        return employeeService.addEmployee(employees);
     }
+
 
     @PutMapping("{id}")
     public void editEmployee(@PathVariable int id, @RequestBody Employee employee) {
-        employeeService.editEmployee(id, employee );
+        employeeService.update(id, employee);
     }
 
     @GetMapping("fullInfo")
@@ -78,9 +81,9 @@ public class EmployeeController {
         return employeeService.getEmployeesFull(id);
     }
 
-    @GetMapping("/paging/page")
-    public List<EmployeeDTO> getEmployeesWithPaging(@RequestParam("page") int page) {
-        return employeeService.getEmployeesWithPaging(page, 10);
+    @GetMapping("/paging/{page}/{size}")
+    public List<Employee> getEmployeesWithPaging(@RequestParam("page") int page, @RequestParam("size") int size) {
+        return employeeService.getEmployeesWithPaging(page, size);
     }
 
     @GetMapping("/withHighestSalary")

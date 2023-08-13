@@ -1,10 +1,10 @@
-package ru.skypro.lessons.springboot.weblibrary.security;
-
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
+//package ru.skypro.lessons.springboot.weblibrary.security;
+//
+//import org.springframework.security.core.userdetails.UserDetails;
+//import org.springframework.security.core.userdetails.UserDetailsService;
+//import org.springframework.security.core.userdetails.UsernameNotFoundException;
+//import org.springframework.stereotype.Component;
+//import org.springframework.stereotype.Service;
 
 //@Service
 //public class AppUserServiceDetails implements UserDetailsService {
