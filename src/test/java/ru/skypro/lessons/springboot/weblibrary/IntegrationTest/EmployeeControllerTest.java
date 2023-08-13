@@ -86,12 +86,14 @@ public class EmployeeControllerTest {
 
         int id = createTestEmployee("Nick").getId();
         mockMvc.perform(put("/employee/{id}", id)
-                        .content(objectMapper.writeValueAsString(new Employee("Michail")))
+                        .content(objectMapper.writeValueAsString(new Employee(id, "Michail")))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").isNumber())
-                .andExpect(jsonPath("$.name").value("Michail"));
+                .andExpect(status().isOk());
+        mockMvc.perform(get("/employee")).
+                andExpect(status().isOk()).
+                andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$[0].name").value("Michail"));
     }
 
 
