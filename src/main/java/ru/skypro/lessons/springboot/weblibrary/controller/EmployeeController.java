@@ -55,12 +55,12 @@ public class EmployeeController {
     }
 
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public List<EmployeeDTO> getEmployeesByIdWithRequired(@PathVariable(required = false) Integer id) {
         return employeeService.getEmployeesByIdWithRequired(id);
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public void deleteEmployeesWithId(@PathVariable(required = false) Integer id) {
         employeeService.deleteEmployeesWithId(id);
     }
@@ -70,18 +70,17 @@ public class EmployeeController {
         return employeeService.addEmployee(employees);
     }
 
-
-    @PutMapping("{id}")
+    @PutMapping("/{id}")
     public void editEmployee(@PathVariable int id, @RequestBody Employee employee) {
         employeeService.update(id, employee);
     }
 
-    @GetMapping("fullInfo")
-    public List<EmployeeFullInfo> getEmployeesFull(int id) {
+    @GetMapping("/fullInfo/{id}")
+    public List<EmployeeFullInfo> getEmployeesFull( @PathVariable int id) {
         return employeeService.getEmployeesFull(id);
     }
 
-    @GetMapping("/paging/{page}/{size}")
+    @GetMapping("/paging")
     public List<Employee> getEmployeesWithPaging(@RequestParam("page") int page, @RequestParam("size") int size) {
         return employeeService.getEmployeesWithPaging(page, size);
     }
@@ -96,13 +95,13 @@ public class EmployeeController {
         return employeeService.withLowSalary();
     }
 
-    @GetMapping("position")
+    @GetMapping("/position")
     public List<EmployeeFullInfo> getEmployeesFullPosition(@RequestParam(required = false) String position) {
         return employeeService.getEmployeesFullPosition(position);
     }
 
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public void uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
+    public void uploadFile(@RequestBody MultipartFile file) throws IOException {
         employeeService.uploadFile(file);
     }
 
