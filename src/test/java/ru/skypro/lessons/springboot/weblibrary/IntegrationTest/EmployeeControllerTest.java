@@ -1,5 +1,6 @@
 package ru.skypro.lessons.springboot.weblibrary.IntegrationTest;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import lombok.SneakyThrows;
@@ -43,8 +44,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class EmployeeControllerTest {
     @Autowired
     MockMvc mockMvc;
-    @Autowired
-    MockMultipartFile mockMultipartFile;
+
     @Autowired
     public EmployeeRepository employeeRepository;
     @Autowired
@@ -290,8 +290,13 @@ public class EmployeeControllerTest {
 
         MockMultipartFile file
                 = new MockMultipartFile(
-                "file",
-                "hello.txt".getBytes()
+                "file",("[\" id\": 1," +
+                " \"name\": \"Alex\"," +
+                "\"salary\": 10000," +
+                "\"position\": {\n" +
+                "      \"id\": 1,\n" +
+                "      \"name\": \"Tester\"}]")
+                .getBytes()
         );
         mockMvc.perform(MockMvcRequestBuilders
                         .multipart(HttpMethod.POST, "/employee/upload")
