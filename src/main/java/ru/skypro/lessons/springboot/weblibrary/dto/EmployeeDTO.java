@@ -83,10 +83,6 @@ public class EmployeeDTO {
         this.salary = salary;
     }
 
-    public void setSalary(Integer salary) {
-        this.salary = salary;
-    }
-
     public PositionDto getPosition() {
         return position;
     }

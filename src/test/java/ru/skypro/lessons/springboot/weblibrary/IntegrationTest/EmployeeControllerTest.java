@@ -290,12 +290,12 @@ public class EmployeeControllerTest {
 
         MockMultipartFile file
                 = new MockMultipartFile(
-                "file",("[\" id\": 1," +
+                "file",("[{\" id\": 1," +
                 " \"name\": \"Alex\"," +
                 "\"salary\": 10000," +
                 "\"position\": {\n" +
                 "      \"id\": 1,\n" +
-                "      \"name\": \"Tester\"}]")
+                "      \"name\": \"Tester\"}}]")
                 .getBytes()
         );
         mockMvc.perform(MockMvcRequestBuilders
