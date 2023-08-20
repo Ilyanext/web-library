@@ -7,8 +7,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpMethod;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.skypro.lessons.springboot.weblibrary.WebLibraryApplication;
 import ru.skypro.lessons.springboot.weblibrary.pojo.Employee;
 import ru.skypro.lessons.springboot.weblibrary.pojo.Position;
@@ -40,15 +43,27 @@ public class RepostControllerTest {
 
     @Test
     void report_Test() throws Exception {
+
         mockMvc.perform(post("/report")).
                 andExpect(status().isOk());
     }
 
     @Test
     void find_Test() throws Exception {
+        MockMultipartFile file
+                = new MockMultipartFile(
+                "file",("[{\"id\": 1," +
+                " \"name\": \"Alex\"," +
+                "\"salary\": 10000," +
+                "\"position\": {\n" +
+                "      \"id\": 1,\n" +
+                "      \"name\": \"Tester\"}}]")
+                .getBytes()
+        );
         int id=0;
-        mockMvc.perform(get("/report/{id}", id))
+        mockMvc.perform(MockMvcRequestBuilders
+                        .multipart(HttpMethod.GET, "/report/{id}")
+                        .file(file))
                 .andExpect(status().isOk());
-
     }
 }

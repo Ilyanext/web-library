@@ -27,13 +27,3 @@ databaseChangeLog:
                   type: varchar (255)
                   constraints:
                     nullable: false
-  - changeSet:
-      id: addColumn-employeeId
-      author: developer
-      changes:
-        - addColumn:
-            tableName: person
-            columns:
-              - column:
-                name: middlename
-                type: varchar(50)
