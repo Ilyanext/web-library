@@ -60,9 +60,9 @@ public class RepostControllerTest {
                 "      \"name\": \"Tester\"}}]")
                 .getBytes()
         );
-        int id=0;
+        int id=1;
         mockMvc.perform(MockMvcRequestBuilders
-                        .multipart(HttpMethod.GET, "/report/{id}")
+                        .multipart(HttpMethod.GET, "/report/{id}", id)
                         .file(file))
                 .andExpect(status().isOk());
     }
