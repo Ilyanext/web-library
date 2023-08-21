@@ -43,27 +43,31 @@ public class RepostControllerTest {
 
     @Test
     void report_Test() throws Exception {
-
         mockMvc.perform(post("/report")).
                 andExpect(status().isOk());
     }
 
     @Test
     void find_Test() throws Exception {
-        MockMultipartFile file
-                = new MockMultipartFile(
-                "file",("[{\"id\": 1," +
-                " \"name\": \"Alex\"," +
-                "\"salary\": 10000," +
-                "\"position\": {\n" +
-                "      \"id\": 1,\n" +
-                "      \"name\": \"Tester\"}}]")
-                .getBytes()
-        );
-        int id=1;
-        mockMvc.perform(MockMvcRequestBuilders
-                        .multipart(HttpMethod.GET, "/report/{id}", id)
-                        .file(file))
-                .andExpect(status().isOk());
+
+        mockMvc.perform(post("/report")).
+                andExpect(status().isOk());
+        int id = 1;
+
+        mockMvc.perform(get("/report/{id}", id)).
+                andExpect(status().isOk());
+
+    }
+
+    @Test
+    void findFile_Test() throws Exception {
+
+        mockMvc.perform(post("/report")).
+                andExpect(status().isOk());
+        int id = 1;
+
+        mockMvc.perform(get("/report/file/{id}", id)).
+                andExpect(status().isOk());
+
     }
 }
