@@ -10,17 +10,23 @@ import ru.skypro.lessons.springboot.weblibrary.dto.EmployeeFullInfo;
 import ru.skypro.lessons.springboot.weblibrary.dto.ReportDto;
 import ru.skypro.lessons.springboot.weblibrary.pojo.Employee;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface EmployeeRepository extends CrudRepository<Employee, Integer> {
+    List<Employee> employees = new ArrayList<>();
+
     @Query(value = "SELECT * FROM employee",
             nativeQuery = true)
     List<EmployeeDTO> findAllEmployees();
 
-
+    default Employee add(Employee employee){
+        employees.add(employee);
+        return employee;
+    }
     List<EmployeeDTO> findByIdGreaterThan(int number);
 
-    Page<EmployeeDTO> findAll(Pageable employeeOfConcretePage);
+    Page<Employee> findAll(Pageable employeeOfConcretePage);
 
     @Query("SELECT new ru.skypro.lessons.springboot.weblibrary.dto." +
             "EmployeeFullInfo(e.id, e.name , e.salary , p.name) " +
@@ -52,7 +58,25 @@ public interface EmployeeRepository extends CrudRepository<Employee, Integer> {
             "FROM Employee e  group by e.position ")
     List<ReportDto> buildReport();
 
-    @Query (value = "update employee set name = :name, " +
-                    "salary = :salary where id = :id", nativeQuery = true)
-    void updateEmployee(int id, String name, int salary);
+//    @Query(value = "update employee set name = :name, " +
+//            "salary = :salary where id = :id", nativeQuery = true)
+//    void updateEmployee(int id, String name, int salary);
+
+    public default void update(int id, Employee oldEmployee) {
+        int index = findIndexById(id);
+        if (index != -1) {
+            employees.set(index, oldEmployee);
+        }
+    }
+
+    private int findIndexById(int id) {
+        int index = -1;
+        for (int i = 0; i < employees.size(); i++) {
+            if (employees.get(i).getId() == id) {
+                index = i;
+                break;
+            }
+        }
+        return index;
+    }
 }

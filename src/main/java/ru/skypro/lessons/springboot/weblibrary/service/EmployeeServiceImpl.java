@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
@@ -16,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.lessons.springboot.weblibrary.dto.EmployeeDTO;
 import ru.skypro.lessons.springboot.weblibrary.dto.EmployeeFullInfo;
+import ru.skypro.lessons.springboot.weblibrary.exeption.EmployeeNotFoundException;
+import ru.skypro.lessons.springboot.weblibrary.exeption.EmployeeNotValidExeption;
 import ru.skypro.lessons.springboot.weblibrary.pojo.Employee;
 import ru.skypro.lessons.springboot.weblibrary.pojo.Report;
 import ru.skypro.lessons.springboot.weblibrary.repository.EmployeeRepository;
@@ -40,14 +41,18 @@ public class EmployeeServiceImpl implements EmployeeService {
     Logger logger = LoggerFactory.getLogger(EmployeeServiceImpl.class);
     private final ObjectMapper objectMapper;
     private final Optional optional;
+    private final EmployeeMapper employeeMapper;
 
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository, ReportRepository reportRepository, PaginEmployeeRepository paginEmployeeRepository, ObjectMapper objectMapper, Optional optional) {
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository, ReportRepository reportRepository, PaginEmployeeRepository paginEmployeeRepository, ObjectMapper objectMapper, Optional optional, EmployeeMapper employeeMapper) {
+
         this.employeeRepository = employeeRepository;
         this.reportRepository = reportRepository;
         this.paginEmployeeRepository = paginEmployeeRepository;
         this.objectMapper = objectMapper;
         this.optional = optional;
+        this.employeeMapper = employeeMapper;
     }
+
 
     @Override
     public List<Employee> getAllEmployees() {
@@ -126,18 +131,31 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 
     // Метод для добавления нового сотрудника
-    @Override
-    public void addEmployee(Employee employee) {
-        logger.debug("Create employee: {}", employee);
-        employeeRepository.save(employee);
+    public List<EmployeeDTO> addEmployee(List<Employee> employees) {
+        logger.debug("Create employee: {}", employees);
+        Optional<Employee> incorrectEmployee = employees.stream()
+                .filter(employee -> employee.getSalary() <= 0 || employee.getName() == null ||
+                        employee.getName().isEmpty())
+                .findFirst();
+        if (incorrectEmployee.isPresent()) {
+            throw new EmployeeNotValidExeption(incorrectEmployee.get());
+        }
+        List<Employee> employees1 = (List<Employee>) employeeRepository.saveAll(employees.stream().collect(Collectors.toList()));
+        List<EmployeeDTO> employeeDTOS =employees1.stream().map(employeeMapper::toDTO).collect(Collectors.toList());
+
+        return employeeDTOS;
+
     }
 
+
     @Override
-    public void editEmployee(int id, Employee employee) {
+    public void update(int id, Employee employee) {
         logger.debug("Edit employee with ID: {} ", id);
-        addEmployee(employee);
+        Employee oldEmployee = employeeRepository.findById(id).orElseThrow(() -> new EmployeeNotFoundException(employee.getId()));
+        oldEmployee.setSalary(employee.getSalary());
+        oldEmployee.setName(employee.getName());
+        employeeRepository.update(id, oldEmployee);
     }
-
 
 
     @Override
@@ -174,12 +192,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 
     @Override
-    public List<EmployeeDTO> getEmployeesWithPaging(int page, int size) {
+    public List<Employee> getEmployeesWithPaging(int page, int size) {
         Pageable employeeOfConcretePage = PageRequest.of(page, size);
-        Page<EmployeeDTO> allPage = employeeRepository.findAll(employeeOfConcretePage);
+        Page<Employee> pages = paginEmployeeRepository.findAll(employeeOfConcretePage);
+
         logger.info("Create paging, wherer page = {}, size = {}", page, size);
-        return allPage.stream()
-                .toList();
+        return pages.stream().toList();
     }
 
     @Override
@@ -247,9 +265,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
         return f.getName();
     }
-
-
-
 
 }
 

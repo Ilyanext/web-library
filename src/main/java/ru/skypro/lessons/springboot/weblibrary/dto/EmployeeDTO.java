@@ -9,9 +9,17 @@ public class EmployeeDTO {
     private String name;
     private Integer salary;
     private PositionDto position;
+    private int count = 0;
 
     public EmployeeDTO() {
 
+    }
+
+    public EmployeeDTO( String name, Integer salary, PositionDto position) {
+        this.id = count++;
+        this.name = name;
+        this.salary = salary;
+        this.position = position;
     }
 
     public EmployeeDTO(Integer id, String name, Integer salary, PositionDto position) {
@@ -72,10 +80,6 @@ public class EmployeeDTO {
     }
 
     public void setSalary(int salary) {
-        this.salary = salary;
-    }
-
-    public void setSalary(Integer salary) {
         this.salary = salary;
     }
 

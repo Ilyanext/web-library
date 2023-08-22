@@ -1,5 +1,8 @@
 package ru.skypro.lessons.springboot.weblibrary.dto;
 
+import ru.skypro.lessons.springboot.weblibrary.pojo.Position;
+import ru.skypro.lessons.springboot.weblibrary.pojo.Report;
+
 public class EmployeeFullInfo {
     private int id;
     private String name;
@@ -7,7 +10,7 @@ public class EmployeeFullInfo {
     private Integer salary;
     // Название должности сотрудника
     private String position;
-
+    private int count = 0;
 
 
     // Конструктор класса EmployeeFullInfo
@@ -17,14 +20,15 @@ public class EmployeeFullInfo {
         this.salary = salary;
         this.position = positionName;
     }
-    public EmployeeFullInfo( String name, Integer salary, String positionName) {
+
+    public EmployeeFullInfo(String name, Integer salary, String positionName) {
+        this.id = count++;
         this.name = name;
         this.salary = salary;
         this.position = positionName;
     }
-    public EmployeeFullInfo(){
 
-    }
+
     public int getId() {
         return id;
     }

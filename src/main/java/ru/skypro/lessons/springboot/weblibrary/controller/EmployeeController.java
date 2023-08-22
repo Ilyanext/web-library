@@ -1,6 +1,8 @@
 package ru.skypro.lessons.springboot.weblibrary.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.lessons.springboot.weblibrary.dto.EmployeeDTO;
@@ -23,7 +25,7 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public Iterable<Employee> showEmployee() {
+    public List<Employee> showEmployee() {
         return employeeService.getEmployees();
     }
 
@@ -53,34 +55,34 @@ public class EmployeeController {
     }
 
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public List<EmployeeDTO> getEmployeesByIdWithRequired(@PathVariable(required = false) Integer id) {
         return employeeService.getEmployeesByIdWithRequired(id);
     }
 
-    @DeleteMapping("{id}")//?
+    @DeleteMapping("/{id}")
     public void deleteEmployeesWithId(@PathVariable(required = false) Integer id) {
         employeeService.deleteEmployeesWithId(id);
     }
 
-    @PostMapping("/")
-    public void addEmployee(@RequestBody Employee employee) {
-        employeeService.addEmployee(employee);
+    @PostMapping
+    public List<EmployeeDTO> addEmployee(@RequestBody List<Employee> employees) {
+        return employeeService.addEmployee(employees);
     }
 
-    @PutMapping("{id}")
+    @PutMapping("/{id}")
     public void editEmployee(@PathVariable int id, @RequestBody Employee employee) {
-        employeeService.editEmployee(id, employee );
+        employeeService.update(id, employee);
     }
 
-    @GetMapping("fullInfo")
-    public List<EmployeeFullInfo> getEmployeesFull(int id) {
+    @GetMapping("/fullInfo/{id}")
+    public List<EmployeeFullInfo> getEmployeesFull( @PathVariable int id) {
         return employeeService.getEmployeesFull(id);
     }
 
-    @GetMapping("/paging/page")
-    public List<EmployeeDTO> getEmployeesWithPaging(@RequestParam("page") int page) {
-        return employeeService.getEmployeesWithPaging(page, 10);
+    @GetMapping("/paging")
+    public List<Employee> getEmployeesWithPaging(@RequestParam("page") int page, @RequestParam("size") int size) {
+        return employeeService.getEmployeesWithPaging(page, size);
     }
 
     @GetMapping("/withHighestSalary")
@@ -93,13 +95,13 @@ public class EmployeeController {
         return employeeService.withLowSalary();
     }
 
-    @GetMapping("position")
+    @GetMapping("/position")
     public List<EmployeeFullInfo> getEmployeesFullPosition(@RequestParam(required = false) String position) {
         return employeeService.getEmployeesFullPosition(position);
     }
 
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public void uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
+    public void uploadFile(@RequestBody MultipartFile file) throws IOException {
         employeeService.uploadFile(file);
     }
 
