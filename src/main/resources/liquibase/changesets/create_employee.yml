@@ -32,6 +32,3 @@ databaseChangeLog:
                   type: varchar(255)
                   constraints:
                     foreignKeyName: report_id
-
-
-
