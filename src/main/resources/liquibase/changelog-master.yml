@@ -7,5 +7,3 @@ databaseChangeLog:
       file: liquibase/changesets/create_report.yml
   - include:
       file: liquibase/changesets/create_appUser.yml
-
-
